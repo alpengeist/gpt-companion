@@ -3,7 +3,7 @@
 ## What it does
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
-This companion tool is the same for GPT-3.
+This companion tool works similar with GPT-3.
 
 Select text in any application and send it to the companion via hot key. 
 Configure your favorite GPT-3 text processing tasks and let the companion call

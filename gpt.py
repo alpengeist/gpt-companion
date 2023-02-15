@@ -14,4 +14,4 @@ def call_gpt(prefix="", text="", temperature=0.7, model="ext-davinci-003", max_t
             max_tokens=max_tokens,
         )["choices"][0]["text"]
     except openai.error.RateLimitError as e:
-        return f"{e.user_message}"
+        return f"{e=}"

@@ -10,6 +10,12 @@ import gpt
 
 def replace_text(widget, text):
     widget.replace('1.0', tk.END, text)
+    if widget == txt_input:
+        set_tokencount(text)
+
+
+def set_tokencount(text):
+    v_tokencount.set(str(len(text.split())))
 
 
 def set_temperature(v):
@@ -61,7 +67,6 @@ ttk.Style().configure('.', font=('Helvetica', 10))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
-
 # Master frame
 frame = ttk.Frame(root, padding=10, borderwidth=2, width=800, height=500)
 frame.grid(column=0, row=0, columnspan=3, sticky='nsew')
@@ -69,13 +74,22 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT)
-replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.HOTKEY)
+txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT, )
 txt_input.columnconfigure(0, weight=1)
 txt_input.rowconfigure(0, weight=1)
+
 txt_output = scrolledtext.ScrolledText(frame, wrap=tk.WORD, relief=tk.FLAT)
 txt_output.columnconfigure(0, weight=1)
 txt_output.rowconfigure(2, weight=1)
+
+# token counter
+tokencount = ttk.Frame(frame)
+lbl_tokencount = ttk.Label(tokencount, text="Input Token Count:")
+v_tokencount = tk.StringVar()
+v_tokencount.set("0")
+lbl_tokencount_value = ttk.Label(tokencount, textvariable=v_tokencount)
+lbl_tokencount.grid(row=0, column=0, sticky="w")
+lbl_tokencount_value.grid(row=0, column=1, sticky="w")
 
 # Action box
 actionbox = ttk.Frame(frame)
@@ -131,10 +145,12 @@ btn_autocall.grid(row=0, column=3, padx=5)
 
 # master frame layout
 txt_input.grid(row=0, column=0, columnspan=3, sticky='nsew')
-actionbox.grid(row=1, column=0, sticky='w', pady=5)
-modelbox.grid(row=2, column=0, sticky='w', pady=5)
-txt_output.grid(row=3, columnspan=3, sticky='nsew')
+tokencount.grid(row=1, column=0, sticky="w", pady=(5, 10))
+actionbox.grid(row=2, column=0, sticky='w', pady=5)
+modelbox.grid(row=3, column=0, sticky='w', pady=5)
+txt_output.grid(row=4, columnspan=3, sticky='nsew')
 
+replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.HOTKEY)
 keyboard.add_hotkey(config.HOTKEY, paste_and_complete)
 
 if __name__ == '__main__':

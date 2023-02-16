@@ -1,5 +1,5 @@
 # key = Text in dropdown box
-# value = prefix for the GPT prompt to define the behavior; the copied text gets appended behind it
+# value = prefix for the GPT prompt to define the behavior; the copied text gets appended to it.
 actions = {
     'Summarize': 'sum up the text:\n',
     'Readability': 'optimize the readability:\n',
@@ -7,13 +7,15 @@ actions = {
     'Alternative Words': 'name altenative words for:\n',
     'Typical Sentence': 'write a typical sentence with:\n',
     'Opposite': 'name the opposite of:\n',
-    'To German': 'translate to German:\n',
-    'To English': 'translate to English:\n',
+    'Explain Code': 'explain the following program code:\n',
     'Pass-through': ''
 }
-MODELS = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001']
+# Model names taken from https://platform.openai.com/playground
+MODELS = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001',
+          'code-davinci-002', 'code-cushman-001']
 TEMPERATURE = 0.7
-MAX_TOKENS = 2000
+# default value for max number of tokens in response
+MAX_TOKENS = 500
 # start value of the corresponding checkbox in the UI. 1 = call GPT immediately after pasting the text
 AUTOCALL = 0
 # for the key syntax see https://pypi.org/project/keyboard/

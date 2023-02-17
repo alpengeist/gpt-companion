@@ -6,7 +6,7 @@ def get_apikey():
     return os.getenv('OPENAI_KEY')
 
 
-def completion(prefix="", text="", temperature=0.7, model="ext-davinci-003", max_tokens=1000):
+def completion(prefix="", text="", temperature=0.7, model="ext-davinci-003", max_tokens=1000, stream=True):
     prompt = prefix + text
     print(f"model={model}, temperature={temperature}\n{prompt}")
     try:
@@ -15,7 +15,8 @@ def completion(prefix="", text="", temperature=0.7, model="ext-davinci-003", max
             prompt=prompt,
             temperature=temperature,
             max_tokens=max_tokens,
-        )["choices"][0]["text"]
+            stream=stream
+        )
     except openai.error.OpenAIError as e:
         return f"{e=}"
 

@@ -19,12 +19,12 @@ def set_tokencount(text):
 
 
 def set_temperature(v):
-    v = round(float(v) ,2)
+    v = round(float(v), 2)
     v_temperature.set(f'{v}')
 
 
 def set_max_tokens(v):
-    v = round(float(v) / 10.0) * 10     # increment in 10s
+    v = round(float(v) / 10.0) * 10  # increment in 10s
     if v == 0:
         v = 1
     v_max_tokens.set(str(v))
@@ -38,11 +38,14 @@ def paste_clipboard():
 def gpt_completion():
     text = txt_input.get('1.0', tk.END)
     prefix = config.text(cbb_actions.get())
-    replace_text(txt_output, f'{prefix}\nworking on it...')
+    replace_text(txt_output, 'working on it...')
     txt_output.update()
     res = gpt.completion(prefix=prefix, text=text, temperature=float(v_temperature.get()),
                          model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
-    replace_text(txt_output, res)
+    txt_output.delete('1.0', tk.END)
+    for event in res:
+        txt_output.insert(tk.END, event['choices'][0]['text'])
+        txt_output.update()
 
 
 def paste_and_complete():
@@ -55,8 +58,8 @@ def paste_and_complete():
     try:
         paste_clipboard()
     except tk.TclError:
-        replace_text(txt_output,'Sorry, clipboard "copy" operation failed in source application.'
-                                ' Maybe it is too slow to react or uses the hotkey for something else.')
+        replace_text(txt_output, 'Sorry, clipboard "copy" operation failed in source application.'
+                                 ' Maybe it is too slow to react or uses the hotkey for something else.')
     if v_autocall.get():
         gpt_completion()
 

@@ -3,11 +3,12 @@
 actions = {
     'Summarize': 'sum up the text:\n',
     'Readability': 'optimize the readability:\n',
+    'Fix Grammar': 'fix the grammar of the following text:\n',
+    'More idiomatic': 'write the following text in a more idiomatic style:\n',
     'Explain Word': 'explain the word ',
     'Alternative Words': 'name altenative words for:\n',
-    'Typical Sentence': 'write a typical sentence with:\n',
     'Opposite': 'name the opposite of:\n',
-    'Explain Code': 'explain the following program code:\n',
+    'Typical Sentence': 'write a typical sentence with:\n',
     'Pass-through': ''
 }
 # Model names taken from https://platform.openai.com/playground
@@ -24,7 +25,7 @@ HOTKEY = 'alt+ctrl+g'
 # Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
 # After the waiting time the companion sends COPY_KEY keypress to the app.
 # If you notice that selected text is not copied, try increasing the time or use another hotkey.
-HOTKEY_WAIT = 1     # seconds
+HOTKEY_WAIT = 1  # seconds
 
 
 def choices():

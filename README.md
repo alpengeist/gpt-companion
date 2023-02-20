@@ -22,10 +22,5 @@ module, which is required for the hot key handling, works under Linux as well. M
 ## Configuration
 The environment variable OPENAI_KEY must contain your OpenAI API key.
 
-To configure your favorite commands or change the hot key, edit the **config.py** file.
-It is very simple and straightforward.
-
 ## Future Ideas
-* The config is in the code. Not ideal of course for non-developers and in case this
-project gains a couple of users. I haven't decided the format, yet.
 * Optional: Issue a paste keyboard command after GPT is finished. This will integrate GPT seamlessly in any text application.

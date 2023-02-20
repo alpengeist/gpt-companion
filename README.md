@@ -28,3 +28,4 @@ It is very simple and straightforward.
 ## Future Ideas
 * The config is in the code. Not ideal of course for non-developers and in case this
 project gains a couple of users. I haven't decided the format, yet.
+* Optional: Issue a paste keyboard command after GPT is finished. This will integrate GPT seamlessly in any text application.

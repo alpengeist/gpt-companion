@@ -1,40 +1,76 @@
-# key = Text in dropdown box
-# value = prefix for the GPT prompt to define the behavior; the copied text gets appended to it.
-actions = {
-    'Summarize': 'sum up the text:\n',
-    'Readability': 'optimize the readability:\n',
-    'Fix Grammar': 'fix the grammar of the following text:\n',
-    'More idiomatic': 'write the following text in a more idiomatic style:\n',
-    'Explain Word': 'explain the word ',
-    'Alternative Words': 'name altenative words for:\n',
-    'Opposite': 'name the opposite of:\n',
-    'Typical Sentence': 'write a typical sentence with:\n',
-    'Pass-through': ''
-}
-# Model names taken from https://platform.openai.com/playground
-MODELS = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001',
-          'code-davinci-002', 'code-cushman-001']
-TEMPERATURE = 0.7
-# default value for max number of tokens in response
-MAX_TOKENS = 500
-# start value of the corresponding checkbox in the UI. 1 = call GPT immediately after pasting the text
-AUTOCALL = 0
-# for the key syntax see https://pypi.org/project/keyboard/
-COPY_KEY = 'ctrl+c'
-HOTKEY = 'alt+ctrl+g'
-# Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
-# After the waiting time the companion sends COPY_KEY keypress to the app.
-# If you notice that selected text is not copied, try increasing the time or use another hotkey.
-HOTKEY_WAIT = 1  # seconds
+import tomllib
+import glob
 
-
-def choices():
-    return [k for k in actions.keys()]
+profiles = {}
 
 
 def default():
-    return next(iter(actions))  # first entry
+    return profiles['default']
 
 
-def text(choice):
-    return actions[choice] if choice in actions else ''
+def select(name):
+    profiles['__selected'] = profiles[name]
+
+
+def selected():
+    return profiles['__selected']
+
+
+def action_choices():
+    return [k for k in selected()['actions'].keys()]
+
+
+def action_default():
+    return next(iter(selected()['actions']))  # first entry
+
+
+def action_text(choice):
+    return selected()['actions'][choice] if choice in selected()['actions'] else ''
+
+
+def hotkey():
+    return selected()['settings']['hotkey']
+
+
+def hotkey_wait():
+    return selected()['settings']['hotkey_wait']
+
+
+def copy_key():
+    return selected()['settings']['copy_key']
+
+
+def temperature():
+    return selected()['settings']['temperature']
+
+
+def models():
+    return selected()['settings']['models']
+
+
+def autocall():
+    return selected()['settings']['autocall']
+
+
+def max_tokens():
+    return selected()['settings']['max_tokens']
+
+
+def read_config_profile(filename):
+    with open(filename, 'rb') as prof:
+        return tomllib.load(prof)
+
+
+def read_all_profiles():
+    profiles['default'] = read_config_profile('profile-default.toml')
+    select('default')
+    files = glob.glob('*.toml')
+    files.sort()
+    for f in files:
+        if f != 'profile-default':
+            print('reading profile ' + f)
+            profile = read_config_profile(f)
+            profiles[profile['settings']['name']] = profile
+
+
+read_all_profiles()

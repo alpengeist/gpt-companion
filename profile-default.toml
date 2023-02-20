@@ -1,0 +1,36 @@
+# GPT Companion profile definition default values
+# To reduce redundancy indivdual profiles internally copy and overwrite the defaults.
+#
+# DO NOT MODIFY THIS FILE!
+#
+# To create your individual profile copy the default and only leave the things in the copy that you want to overwrite.
+#
+[settings]
+name  = "Default"
+# Model names taken from https://platform.openai.com/playground
+models = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001']
+temperature = 0.7
+# default value for max number of tokens in response
+max_tokens = 500
+# start value of the corresponding checkbox in the UI. 1 = call GPT immediately after pasting the text
+autocall = 0
+# for the key syntax see https://pypi.org/project/keyboard/
+copy_key = 'ctrl+c'
+hotkey = 'alt+ctrl+g'
+# Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
+# After the waiting time the companion sends COPY_KEY keypress to the app.
+# If you notice that selected text is not copied, try increasing the time or use another hotkey.
+hotkey_wait = 1  # seconds
+
+# key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
+# of the input text.
+[actions]
+"Summarize" =  "sum up the text:\n"
+"Readability"= "optimize the readability=\n"
+"Fix Grammar"= "fix the grammar of the following text=\n"
+"More idiomatic"= "write the following text in a more idiomatic style=\n"
+"Explain Word"= "explain the word "
+"Alternative Words"= "name altenative words for=\n"
+"Opposite"= "name the opposite of=\n"
+"Typical Sentence"= "write a typical sentence with=\n"
+"Pass-through"= ""

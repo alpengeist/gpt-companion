@@ -37,7 +37,7 @@ def paste_clipboard():
 
 def gpt_completion():
     text = txt_input.get('1.0', tk.END)
-    prefix = config.text(cbb_actions.get())
+    prefix = config.action_text(cbb_actions.get())
     replace_text(txt_output, 'working on it...')
     txt_output.update()
     res = gpt.completion(prefix=prefix, text=text, temperature=float(v_temperature.get()),
@@ -50,11 +50,11 @@ def gpt_completion():
 
 def paste_and_complete():
     # Give app time to settle from hotkey
-    time.sleep(config.HOTKEY_WAIT or 1)
+    time.sleep(config.hotkey_wait())
     # print('sending ctrl+c')
     # Force source app to copy to clipboard and wait a little
-    keyboard.send(config.COPY_KEY or 'ctrl+c')
-    time.sleep(config.HOTKEY_WAIT or 1)
+    keyboard.send(config.copy_key())
+    time.sleep(config.hotkey_wait())
     try:
         paste_clipboard()
     except tk.TclError:
@@ -100,34 +100,34 @@ btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard)
 btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
 v_action = tk.StringVar()
 # action menu
-cbb_actions = ttk.Combobox(actionbox, values=config.choices(), font=('Helvetica', 10))
+cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), font=('Helvetica', 10))
 cbb_actions.state(['readonly'])
-cbb_actions.set(config.default())
+cbb_actions.set(config.action_default())
 # hotkey autocall option
 v_autocall = tk.IntVar()
-v_autocall.set(config.AUTOCALL)
-btn_autocall = ttk.Checkbutton(actionbox, variable=v_autocall, text='Auto call with hotkey ' + config.HOTKEY)
+v_autocall.set(config.autocall())
+btn_autocall = ttk.Checkbutton(actionbox, variable=v_autocall, text='Auto call with hotkey ' + config.hotkey())
 
 # Model parameters box
 modelbox = ttk.Frame(frame)
 # model menu
 lbl_models = ttk.Label(modelbox, text='Model:')
-cbb_models = ttk.Combobox(modelbox, values=config.MODELS, font=('Helvetica', 10))
+cbb_models = ttk.Combobox(modelbox, values=config.models(), font=('Helvetica', 10))
 cbb_models.state(['readonly'])
-cbb_models.set(config.MODELS[0])
+cbb_models.set(config.models()[0])
 
 # temperature display
 v_temperature = tk.StringVar()
-v_temperature.set(str(config.TEMPERATURE))
+v_temperature.set(str(config.temperature()))
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
-scl_temperature = ttk.Scale(modelbox, from_=0, to=1, value=config.TEMPERATURE, command=set_temperature)
+scl_temperature = ttk.Scale(modelbox, from_=0, to=1, value=config.temperature(), command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 
 # max_tokens display
 v_max_tokens = tk.StringVar()
-v_max_tokens.set(str(config.MAX_TOKENS))
+v_max_tokens.set(str(config.max_tokens()))
 lbl_max_tokens = ttk.Label(modelbox, text='Maximum Output Tokens (Words):')
-scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, value=config.MAX_TOKENS, command=set_max_tokens, length=150)
+scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, value=config.max_tokens(), command=set_max_tokens, length=150)
 lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)
 
 # modelbox layout
@@ -153,8 +153,8 @@ actionbox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 txt_output.grid(row=4, columnspan=3, sticky='nsew')
 
-replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.HOTKEY)
-keyboard.add_hotkey(config.HOTKEY, paste_and_complete)
+replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey())
+keyboard.add_hotkey(config.hotkey(), paste_and_complete)
 
 if __name__ == '__main__':
     if not os.getenv('OPENAI_KEY'):

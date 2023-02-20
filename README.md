@@ -16,7 +16,7 @@ same prompts over and over again. You never have to leave the source application
 ## Installation
 `pip install -r requirements.txt`
 
-It has been developed with Python 3.10 and the Tk UI under Windows. The **keyboard**
+It has been developed with Python 3.11 and the Tk UI under Windows. The **keyboard**
 module, which is required for the hot key handling, works under Linux as well. MacOS is experimental.
 
 ## Configuration

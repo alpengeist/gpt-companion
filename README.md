@@ -34,15 +34,15 @@ The program must be run in its directory, otherwise the configuration profiles w
 ## Configuration
 The environment variable OPENAI_KEY must contain your OpenAI API key.
 
-The program is configured through profile files in TOML format. The default profile is **profile-default.toml**,
-which must not be modified. Custom profiles are collected during startup by reading all files with the .toml extension.
+The program is configured through profile files in TOML format. The default profile is **profile-default.toml**.
+Custom profiles are collected during startup by reading all files with the .toml extension.
   
 To define a new profile:
 * Create a new .toml file in the program's directory
-* Use the default profile as a template.
-* Mandatory: settings.name
-* Optional: settings.models
-* Optional: actions
+* Use the default profile as a template for the syntax of the properties.
+* Mandatory: *settings.name*
+* Optional: *settings.models*
+* Optional: *actions*
 
 ## Future Ideas
 * Optional: Issue a paste keyboard command after GPT is finished. This could integrate GPT seamlessly in any text application.

@@ -3,11 +3,7 @@ import tomllib
 import glob
 
 _selected = {}
-profiles = {'Default': {'settings': {}}}
-
-
-def default():
-    return profiles['Default']
+profiles = {}
 
 
 def select(pname):
@@ -27,60 +23,60 @@ def name():
     return selected()['settings']['name']
 
 
+def models():
+    return selected()['settings']['models']
+
+
 def action_choices():
     return [k for k in selected()['actions'].keys()]
 
 
-def action_default():
-    return next(iter(selected()['actions']))  # first entry
+def action_first():
+    return next(iter(selected()['actions']))
 
 
 def action_text(choice):
     return selected()['actions'][choice] if choice in selected()['actions'] else ''
 
 
+def default():
+    return profiles['Default']
+
+
 def hotkey():
-    return selected()['settings']['hotkey']
+    return default()['startup']['hotkey']
 
 
 def hotkey_wait():
-    return selected()['settings']['hotkey_wait']
+    return default()['startup']['hotkey_wait']
 
 
 def copy_key():
-    return selected()['settings']['copy_key']
+    return default()['startup']['copy_key']
 
 
 def temperature():
-    return selected()['settings']['temperature']
-
-
-def models():
-    return selected()['settings']['models']
+    return default()['startup']['temperature']
 
 
 def autocall():
-    return selected()['settings']['autocall']
+    return default()['startup']['autocall']
 
 
 def max_tokens():
-    return selected()['settings']['max_tokens']
+    return default()['startup']['max_tokens']
 
 
 # read custom profile and overwrite the default values
 def read_config_profile(filename):
     with open(filename, 'rb') as prof:
-        result = copy.deepcopy(default())
-        custom = tomllib.load(prof)
-        result['actions'] = custom['actions']  # actions are completely overwritten
-        for k in custom['settings']:  # settings get merged
-            result['settings'][k] = custom['settings'][k]
-        return result
+        prof = tomllib.load(prof)
+        if 'settings' not in prof or 'name' not in prof['settings']:
+            raise f'{filename}: missing mandatory property settings.name'
+    return prof
 
 
 def read_all_profiles():
-    profiles['Default'] = read_config_profile('profile-default.toml')
-    select('Default')
     files = glob.glob('*.toml')
     files.sort()
     for f in files:
@@ -88,6 +84,9 @@ def read_all_profiles():
             print('reading profile ' + f)
             profile = read_config_profile(f)
             profiles[profile['settings']['name']] = profile
+    if 'Default' not in profiles:
+        raise 'Default profile not found. Make sure to run the program in the installation directory'
+    select('Default')
 
 
 read_all_profiles()

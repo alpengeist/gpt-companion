@@ -13,7 +13,7 @@ def change_profile(e):
     cbb_models.configure(values=config.models())
     cbb_models.set(config.models()[0])
     cbb_actions.configure(values=config.action_choices())
-    v_action.set(config.action_default())
+    v_action.set(config.action_first())
 
 
 def replace_text(widget, text):
@@ -120,7 +120,7 @@ v_action = tk.StringVar()
 # action menu
 cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, font=('Helvetica', 10))
 cbb_actions.state(['readonly'])
-cbb_actions.set(config.action_default())
+cbb_actions.set(config.action_first())
 # hotkey autocall option
 v_autocall = tk.IntVar()
 v_autocall.set(config.autocall())

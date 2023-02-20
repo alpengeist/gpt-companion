@@ -1,5 +1,5 @@
 .idea
-test-profile*.toml
+text-de.toml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

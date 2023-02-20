@@ -1,9 +1,9 @@
 # GPT Companion profile definition default values
-# To reduce redundancy indivdual profiles internally copy and overwrite the defaults.
 #
 # DO NOT MODIFY THIS FILE!
 #
-# To create your individual profile copy the default and only leave the things in the copy that you want to overwrite.
+# To reduce redundancy indivdual profiles overwrite the defaults.
+# To create your individual profile, copy the default and only leave the things in the copy that you want to overwrite.
 #
 [settings]
 name  = "Default"
@@ -27,10 +27,10 @@ hotkey_wait = 1  # seconds
 [actions]
 "Summarize" =  "sum up the text:\n"
 "Readability"= "optimize the readability=\n"
-"Fix Grammar"= "fix the grammar of the following text=\n"
-"More idiomatic"= "write the following text in a more idiomatic style=\n"
+"Fix Grammar"= "fix the grammar of the following text:\n"
+"More idiomatic"= "write the following text in a more idiomatic style:\n"
 "Explain Word"= "explain the word "
-"Alternative Words"= "name altenative words for=\n"
-"Opposite"= "name the opposite of=\n"
-"Typical Sentence"= "write a typical sentence with=\n"
+"Alternative Words"= "name altenative words for:\n"
+"Opposite"= "name the opposite of:\n"
+"Typical Sentence"= "write a typical sentence with:\n"
 "Pass-through"= ""

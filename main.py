@@ -8,6 +8,14 @@ import config
 import gpt
 
 
+def change_profile(e):
+    config.select(cbb_profiles.get())
+    cbb_models.configure(values=config.models())
+    cbb_models.set(config.models()[0])
+    cbb_actions.configure(values=config.action_choices())
+    v_action.set(config.action_default())
+
+
 def replace_text(widget, text):
     widget.replace('1.0', tk.END, text)
     if widget == txt_input:
@@ -94,13 +102,23 @@ lbl_tokencount_value = ttk.Label(tokencount, textvariable=v_tokencount)
 lbl_tokencount.grid(row=0, column=0, sticky="w")
 lbl_tokencount_value.grid(row=0, column=1, sticky="w")
 
+# Profile menu
+profilebox = ttk.Frame(frame)
+lbl_profiles = ttk.Label(profilebox, text='Profile:')
+cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices(), font=('Helvetica', 10))
+cbb_profiles.state(['readonly'])
+cbb_profiles.set(config.name())
+cbb_profiles.bind('<<ComboboxSelected>>', change_profile)
+lbl_profiles.grid(row=0, column=0, sticky='w')
+cbb_profiles.grid(row=0, column=1, sticky='e')
+
 # Action box
 actionbox = ttk.Frame(frame)
 btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard)
 btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
 v_action = tk.StringVar()
 # action menu
-cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), font=('Helvetica', 10))
+cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, font=('Helvetica', 10))
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_default())
 # hotkey autocall option
@@ -132,7 +150,7 @@ lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)
 
 # modelbox layout
 lbl_models.grid(row=0, column=0, sticky='e')
-cbb_models.grid(row=0, column=1, columnspan=1, padx=5, sticky='e')
+cbb_models.grid(row=0, column=1, padx=5, sticky='e')
 lbl_temperature.grid(row=0, column=2, sticky='e')
 scl_temperature.grid(row=0, column=3, sticky='w')
 lbl_temperature_value.grid(row=0, column=4, padx=5, sticky='e')
@@ -148,10 +166,11 @@ btn_autocall.grid(row=0, column=3, padx=5)
 
 # master frame layout
 txt_input.grid(row=0, column=0, columnspan=3, sticky='nsew')
-tokencount.grid(row=1, column=0, sticky="w", pady=(5, 10))
-actionbox.grid(row=2, column=0, sticky='w', pady=5)
-modelbox.grid(row=3, column=0, sticky='w', pady=5)
-txt_output.grid(row=4, columnspan=3, sticky='nsew')
+tokencount.grid(row=1, column=0, sticky='w', pady=(5, 10))
+profilebox.grid(row=2, column=0, sticky='w', pady=5)
+actionbox.grid(row=3, column=0, sticky='w', pady=5)
+modelbox.grid(row=4, column=0, sticky='w', pady=5)
+txt_output.grid(row=5, columnspan=3, sticky='nsew')
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey())
 keyboard.add_hotkey(config.hotkey(), paste_and_complete)

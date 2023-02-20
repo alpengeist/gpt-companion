@@ -1,19 +1,30 @@
+import copy
 import tomllib
 import glob
 
-profiles = {}
+_selected = {}
+profiles = {'Default': {'settings': {}}}
 
 
 def default():
-    return profiles['default']
+    return profiles['Default']
 
 
-def select(name):
-    profiles['__selected'] = profiles[name]
+def select(pname):
+    global _selected
+    _selected = profiles[pname]
 
 
 def selected():
-    return profiles['__selected']
+    return _selected
+
+
+def profile_choices():
+    return [k for k in profiles.keys()]
+
+
+def name():
+    return selected()['settings']['name']
 
 
 def action_choices():
@@ -56,14 +67,20 @@ def max_tokens():
     return selected()['settings']['max_tokens']
 
 
+# read custom profile and overwrite the default values
 def read_config_profile(filename):
     with open(filename, 'rb') as prof:
-        return tomllib.load(prof)
+        result = copy.deepcopy(default())
+        custom = tomllib.load(prof)
+        result['actions'] = custom['actions']  # actions are completely overwritten
+        for k in custom['settings']:  # settings get merged
+            result['settings'][k] = custom['settings'][k]
+        return result
 
 
 def read_all_profiles():
-    profiles['default'] = read_config_profile('profile-default.toml')
-    select('default')
+    profiles['Default'] = read_config_profile('profile-default.toml')
+    select('Default')
     files = glob.glob('*.toml')
     files.sort()
     for f in files:

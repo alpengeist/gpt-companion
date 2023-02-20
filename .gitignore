@@ -1,5 +1,5 @@
 .idea
-text-de.toml
+test*.toml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

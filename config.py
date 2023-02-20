@@ -6,8 +6,14 @@ _selected = {}
 profiles = {}
 
 
+def empty_profile():
+    return {'name': 'empty', 'settings': {'models:[]'}, 'actions': [{'pass-through': ''}]}
+
+
 def select(pname):
     global _selected
+    if pname not in profiles:
+        raise 'unknown profile {pname}'
     _selected = profiles[pname]
 
 
@@ -67,12 +73,19 @@ def max_tokens():
     return default()['startup']['max_tokens']
 
 
+def validate_profile(p):
+    if 'settings' not in p or 'name' not in p['settings']:
+        raise ValueError('missing mandatory property settings.name')
+    if 'settings' not in p or 'models' not in p['settings'] or len(p['settings']['models']) == 0:
+        raise ValueError('missing or empty mandatory property settings.models')
+    if 'actions' not in p or len(p['actions']) == 0:
+        raise ValueError('missing or empty mandatory property settings.actions')
+
+
 # read custom profile and overwrite the default values
 def read_config_profile(filename):
     with open(filename, 'rb') as prof:
         prof = tomllib.load(prof)
-        if 'settings' not in prof or 'name' not in prof['settings']:
-            raise f'{filename}: missing mandatory property settings.name'
     return prof
 
 
@@ -83,7 +96,12 @@ def read_all_profiles():
         if f != 'profile-default':
             print('reading profile ' + f)
             profile = read_config_profile(f)
-            profiles[profile['settings']['name']] = profile
+            try:
+                validate_profile(profile)
+            except ValueError as e:
+                print(f'Error in profile {f}, file skipped: {e}')
+            else:
+                profiles[profile['settings']['name']] = profile
     if 'Default' not in profiles:
         raise 'Default profile not found. Make sure to run the program in the installation directory'
     select('Default')

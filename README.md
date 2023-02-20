@@ -41,8 +41,8 @@ To define a new profile:
 * Create a new .toml file in the program's directory
 * Use the default profile as a template for the syntax of the properties.
 * Mandatory: *settings.name*
-* Optional: *settings.models*
-* Optional: *actions*
+* Mandatory: *settings.models*
+* Mandatory: *actions*
 
 ## Future Ideas
 * Optional: Issue a paste keyboard command after GPT is finished. This could integrate GPT seamlessly in any text application.

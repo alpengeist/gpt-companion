@@ -5,13 +5,13 @@
 [settings]
 # MANDATORY in custom model
 name  = "Default"
-# OPTIONAL in custom model
+# MANDATORY in custom model
 # Model names taken from https://platform.openai.com/playground
 models = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001']
 
 # key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text.
-# OPTIONAL in custom model
+# MANDATORY in custom model
 [actions]
 "Summarize" =  "sum up the text:\n"
 "Readability"= "optimize the readability=\n"

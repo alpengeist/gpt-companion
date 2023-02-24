@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import scrolledtext
 import keyboard
+import mouse
 import config
 import gpt
 
@@ -73,6 +74,8 @@ def paste_and_complete():
 
 
 root = tk.Tk()
+if config.startup()['on_top']:
+    root.attributes('-topmost',1)
 root.title('GPT Companion')
 ttk.Style().configure('.', font=('Helvetica', 10))
 root.columnconfigure(0, weight=1)
@@ -88,6 +91,7 @@ frame.rowconfigure(0, weight=1)
 txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT, )
 txt_input.columnconfigure(0, weight=1)
 txt_input.rowconfigure(0, weight=1)
+txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
 txt_output = scrolledtext.ScrolledText(frame, wrap=tk.WORD, relief=tk.FLAT)
 txt_output.columnconfigure(0, weight=1)
@@ -116,8 +120,8 @@ cbb_profiles.grid(row=0, column=1, sticky='e')
 actionbox = ttk.Frame(frame)
 btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard)
 btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
-v_action = tk.StringVar()
 # action menu
+v_action = tk.StringVar()
 cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, font=('Helvetica', 10))
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
@@ -172,8 +176,44 @@ actionbox.grid(row=3, column=0, sticky='w', pady=5)
 modelbox.grid(row=4, column=0, sticky='w', pady=5)
 txt_output.grid(row=5, columnspan=3, sticky='nsew')
 
-replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey())
-keyboard.add_hotkey(config.hotkey(), paste_and_complete)
+replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
+             + '\nYou can also type text here and press Ctrl+Enter to run GPT.')
+
+
+def build_action_menu():
+    def menu_action_command(cmd):
+        cbb_actions.set(cmd)
+        paste_and_complete()
+
+    m = tk.Menu(root, tearoff=0)
+    m.add_command(label="-Close-")  # dummy command to be able to close menu without effect
+    m.add_separator()
+    for action in config.action_choices():
+        # a=action makes sure we get the value of action, not the variable
+        m.add_command(label=action, command=lambda a=action: menu_action_command(a))
+    return m
+
+
+def pop_action_menu():
+    pos = mouse.get_position()
+    menu_actions.post(pos[0], pos[1])
+    menu_actions.focus_set()
+
+
+def hide_action_menu():
+    menu_actions.unpost()
+    menu_actions.grab_release()
+
+
+def hotkey_pressed():
+    if config.startup()['action_popup']:
+        pop_action_menu()
+    else:
+        paste_and_complete()
+
+
+menu_actions = build_action_menu()
+keyboard.add_hotkey(config.hotkey(), hotkey_pressed)
 
 if __name__ == '__main__':
     if not os.getenv('OPENAI_KEY'):

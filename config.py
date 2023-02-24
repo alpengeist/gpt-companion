@@ -45,32 +45,36 @@ def action_text(choice):
     return selected()['actions'][choice] if choice in selected()['actions'] else ''
 
 
-def default():
+def default_profile():
     return profiles['Default']
 
 
+def startup():
+    return default_profile()['startup']
+
+
 def hotkey():
-    return default()['startup']['hotkey']
+    return startup()['hotkey']
 
 
 def hotkey_wait():
-    return default()['startup']['hotkey_wait']
+    return startup()['hotkey_wait']
 
 
 def copy_key():
-    return default()['startup']['copy_key']
+    return startup()['copy_key']
 
 
 def temperature():
-    return default()['startup']['temperature']
+    return startup()['temperature']
 
 
 def autocall():
-    return default()['startup']['autocall']
+    return startup()['autocall']
 
 
 def max_tokens():
-    return default()['startup']['max_tokens']
+    return startup()['max_tokens']
 
 
 def validate_profile(p):

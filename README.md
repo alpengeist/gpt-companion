@@ -13,6 +13,10 @@ The companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste the text yourself and fiddle with the
 same prompts over and over again. You never have to leave the source application. Just run the companion, put it aside and feed it with text.
 
+It can display a popup menu with all configured actions in place right at mouse position, in any application. This is configurable. 
+The Companion can stay on top of all windows, also configurable.
+See the configuration section below.
+
 ## Prerequisites
 Python 3.11
 

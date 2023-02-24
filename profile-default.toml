@@ -7,12 +7,14 @@
 name  = "Default"
 # MANDATORY in custom model
 # Model names taken from https://platform.openai.com/playground
-models = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-001']
+# I never use the simpler models for anything, so I left them out
+models = ['text-davinci-003', 'text-curie-001', 'code-davinci-002']
 
 # key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
-# of the input text.
+# of the input text. The first entry is the default.
 # MANDATORY in custom model
 [actions]
+"Pass-through"= ""
 "Summarize" =  "sum up the text:\n"
 "Readability"= "optimize the readability=\n"
 "Fix Grammar"= "fix the grammar of the following text:\n"
@@ -21,15 +23,19 @@ models = ['text-davinci-003', 'text-curie-001', 'text-babbage-001', 'text-ada-00
 "Alternative Words"= "name altenative words for:\n"
 "Opposite"= "name the opposite of:\n"
 "Typical Sentence"= "write a typical sentence with:\n"
-"Pass-through"= ""
 
 # The following props are only used during startup and cannot be overwritten by custom profiles
 [startup]
+# let the companion be always on top; very useful for working inside large texts
+on_top = 1
+# GPT temperature
 temperature = 0.7
 # default value for max number of tokens in response
 max_tokens = 500
 # start value of the corresponding checkbox in the UI. 1 = call GPT immediately after pasting the text
-autocall = 0
+autocall = 1
+# enable/disable in-place action popup after hot key has been pressed
+action_popup = 1
 # for the key syntax see https://pypi.org/project/keyboard/
 copy_key = 'ctrl+c'
 hotkey = 'alt+ctrl+g'

@@ -27,7 +27,7 @@ models = ['text-davinci-003', 'text-curie-001', 'code-davinci-002']
 # The following props are only used during startup and cannot be overwritten by custom profiles
 [startup]
 # let the companion be always on top; very useful for working inside large texts
-on_top = 1
+on_top = 0
 # GPT temperature
 temperature = 0.7
 # default value for max number of tokens in response

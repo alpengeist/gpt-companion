@@ -10,7 +10,9 @@ import gpt
 
 
 def change_profile(e):
+    menu_actions.delete(0, len(config.action_choices())+1)
     config.select(cbb_profiles.get())
+    build_action_menu(menu_actions)
     cbb_models.configure(values=config.models())
     cbb_models.set(config.models()[0])
     cbb_actions.configure(values=config.action_choices())
@@ -73,11 +75,41 @@ def paste_and_complete():
         gpt_completion()
 
 
+def build_action_menu(m):
+    def menu_action_command(cmd):
+        cbb_actions.set(cmd)
+        paste_and_complete()
+
+    m.add_command(label="-Close-")  # dummy command to be able to close menu without effect
+    m.add_separator()
+    for action in config.action_choices():
+        # a=action makes sure we get the value of action, not the variable
+        m.add_command(label=action, command=lambda a=action: menu_action_command(a))
+
+
+def pop_action_menu():
+    pos = mouse.get_position()
+    menu_actions.post(pos[0], pos[1])
+    menu_actions.focus_set()
+
+
+def hide_action_menu():
+    menu_actions.unpost()
+    menu_actions.grab_release()
+
+
+def hotkey_pressed():
+    if config.startup()['action_popup']:
+        pop_action_menu()
+    else:
+        paste_and_complete()
+
+
 root = tk.Tk()
 if config.startup()['on_top']:
     root.attributes('-topmost',1)
 root.title('GPT Companion')
-ttk.Style().configure('.', font=('Helvetica', 10))
+ttk.Style().configure('.', font=('Helvetica', 11))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
@@ -88,7 +120,7 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT, )
+txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT, font=('Helvetica', 10))
 txt_input.columnconfigure(0, weight=1)
 txt_input.rowconfigure(0, weight=1)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
@@ -109,7 +141,7 @@ lbl_tokencount_value.grid(row=0, column=1, sticky="w")
 # Profile menu
 profilebox = ttk.Frame(frame)
 lbl_profiles = ttk.Label(profilebox, text='Profile:')
-cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices(), font=('Helvetica', 10))
+cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices(), font=('Helvetica', 11))
 cbb_profiles.state(['readonly'])
 cbb_profiles.set(config.name())
 cbb_profiles.bind('<<ComboboxSelected>>', change_profile)
@@ -179,40 +211,8 @@ txt_output.grid(row=5, columnspan=3, sticky='nsew')
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
              + '\nYou can also type text here and press Ctrl+Enter to run GPT.')
 
-
-def build_action_menu():
-    def menu_action_command(cmd):
-        cbb_actions.set(cmd)
-        paste_and_complete()
-
-    m = tk.Menu(root, tearoff=0)
-    m.add_command(label="-Close-")  # dummy command to be able to close menu without effect
-    m.add_separator()
-    for action in config.action_choices():
-        # a=action makes sure we get the value of action, not the variable
-        m.add_command(label=action, command=lambda a=action: menu_action_command(a))
-    return m
-
-
-def pop_action_menu():
-    pos = mouse.get_position()
-    menu_actions.post(pos[0], pos[1])
-    menu_actions.focus_set()
-
-
-def hide_action_menu():
-    menu_actions.unpost()
-    menu_actions.grab_release()
-
-
-def hotkey_pressed():
-    if config.startup()['action_popup']:
-        pop_action_menu()
-    else:
-        paste_and_complete()
-
-
-menu_actions = build_action_menu()
+menu_actions = tk.Menu(root, tearoff=0)
+build_action_menu(menu_actions)
 keyboard.add_hotkey(config.hotkey(), hotkey_pressed)
 
 if __name__ == '__main__':

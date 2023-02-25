@@ -184,6 +184,7 @@ def build_action_menu():
     def menu_action_command(cmd):
         cbb_actions.set(cmd)
         paste_and_complete()
+        hide_action_menu()
 
     m = tk.Menu(root, tearoff=0)
     m.add_command(label="-Close-")  # dummy command to be able to close menu without effect

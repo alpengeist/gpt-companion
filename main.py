@@ -57,6 +57,7 @@ def gpt_completion():
     txt_output.delete('1.0', tk.END)
     for event in res:
         txt_output.insert(tk.END, event['choices'][0]['text'])
+        txt_output.see(tk.END)
         txt_output.update()
 
 
@@ -121,12 +122,12 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT)
+txt_input = ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT, autohide=True)
 txt_input.columnconfigure(0, weight=1)
 txt_input.rowconfigure(0, weight=1)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
-txt_output = ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT)
+txt_output = ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT, autohide=True)
 txt_output.columnconfigure(0, weight=1)
 txt_output.rowconfigure(2, weight=1)
 

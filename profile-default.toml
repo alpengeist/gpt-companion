@@ -43,3 +43,6 @@ hotkey = 'alt+ctrl+g'
 # After the waiting time the companion sends COPY_KEY keypress to the app.
 # If you notice that selected text is not copied, try increasing the time or use another hotkey.
 hotkey_wait = 1  # seconds
+# the general font
+font="Segoe UI Variable Display"
+font_size=11

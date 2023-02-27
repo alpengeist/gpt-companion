@@ -1,8 +1,8 @@
 import os
 import time
+import ttkbootstrap as ttk
+from ttkbootstrap.scrolled import ScrolledText
 import tkinter as tk
-from tkinter import ttk
-from tkinter import scrolledtext
 import keyboard
 import mouse
 import config
@@ -20,7 +20,8 @@ def change_profile(e):
 
 
 def replace_text(widget, text):
-    widget.replace('1.0', tk.END, text)
+    widget.delete('1.0', tk.END)
+    widget.insert('1.0', text)
     if widget == txt_input:
         set_tokencount(text)
 
@@ -105,11 +106,10 @@ def hotkey_pressed():
         paste_and_complete()
 
 
-root = tk.Tk()
+root = ttk.Window(themename='darkly')
 if config.startup()['on_top']:
     root.attributes('-topmost',1)
 root.title('GPT Companion')
-ttk.Style().configure('.', font=('Helvetica', 11))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
@@ -120,12 +120,12 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = scrolledtext.ScrolledText(frame, width=100, wrap=tk.WORD, relief=tk.FLAT, font=('Helvetica', 10))
+txt_input = ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT)
 txt_input.columnconfigure(0, weight=1)
 txt_input.rowconfigure(0, weight=1)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
-txt_output = scrolledtext.ScrolledText(frame, wrap=tk.WORD, relief=tk.FLAT)
+txt_output = ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT)
 txt_output.columnconfigure(0, weight=1)
 txt_output.rowconfigure(2, weight=1)
 
@@ -141,12 +141,12 @@ lbl_tokencount_value.grid(row=0, column=1, sticky="w")
 # Profile menu
 profilebox = ttk.Frame(frame)
 lbl_profiles = ttk.Label(profilebox, text='Profile:')
-cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices(), font=('Helvetica', 11))
+cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices())
 cbb_profiles.state(['readonly'])
 cbb_profiles.set(config.name())
 cbb_profiles.bind('<<ComboboxSelected>>', change_profile)
 lbl_profiles.grid(row=0, column=0, sticky='w')
-cbb_profiles.grid(row=0, column=1, sticky='e')
+cbb_profiles.grid(row=0, column=1, padx=5, sticky='e')
 
 # Action box
 actionbox = ttk.Frame(frame)
@@ -154,7 +154,7 @@ btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard)
 btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
 # action menu
 v_action = tk.StringVar()
-cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, font=('Helvetica', 10))
+cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
 # hotkey autocall option
@@ -166,7 +166,7 @@ btn_autocall = ttk.Checkbutton(actionbox, variable=v_autocall, text='Auto call w
 modelbox = ttk.Frame(frame)
 # model menu
 lbl_models = ttk.Label(modelbox, text='Model:')
-cbb_models = ttk.Combobox(modelbox, values=config.models(), font=('Helvetica', 10))
+cbb_models = ttk.Combobox(modelbox, values=config.models())
 cbb_models.state(['readonly'])
 cbb_models.set(config.models()[0])
 
@@ -188,7 +188,7 @@ lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)
 lbl_models.grid(row=0, column=0, sticky='e')
 cbb_models.grid(row=0, column=1, padx=5, sticky='e')
 lbl_temperature.grid(row=0, column=2, sticky='e')
-scl_temperature.grid(row=0, column=3, sticky='w')
+scl_temperature.grid(row=0, column=3, padx=5, sticky='w')
 lbl_temperature_value.grid(row=0, column=4, padx=5, sticky='e')
 lbl_max_tokens.grid(row=0, column=5, padx=5, sticky='e')
 scl_max_tokens.grid(row=0, column=6, columnspan=2, sticky='ew')

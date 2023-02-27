@@ -1,3 +1,4 @@
 openai
 keyboard
 mouse
+ttkbootstrap

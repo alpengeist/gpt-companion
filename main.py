@@ -126,7 +126,7 @@ frame.rowconfigure(0, weight=1)
 # INPUT and OUTPUT text fields
 txt_input = scrolledtext.ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT)
 txt_input.columnconfigure(0, weight=1)
-txt_input.rowconfigure(0, weight=2)
+txt_input.rowconfigure(0, weight=1)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
 txt_output = scrolledtext.ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT)

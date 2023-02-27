@@ -54,13 +54,19 @@ def gpt_completion():
     prefix = config.action_text(cbb_actions.get())
     replace_text(txt_output, 'working on it...')
     txt_output.update()
-    res = gpt.completion(prefix=prefix, text=text, temperature=float(v_temperature.get()),
-                         model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
-    txt_output.delete('1.0', tk.END)
-    for event in res:
-        txt_output.insert(tk.END, event['choices'][0]['text'])
-        txt_output.see(tk.END)
-        txt_output.update()
+    try:
+        progress_gpt.step(5)
+        frame.update()
+        res = gpt.completion(prefix=prefix, text=text, temperature=float(v_temperature.get()),
+                             model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
+        txt_output.delete('1.0', tk.END)
+        for event in res:
+            txt_output.insert(tk.END, event['choices'][0]['text'])
+            txt_output.see(tk.END)
+            progress_gpt.step()
+            txt_output.update()
+    finally:
+        progress_gpt['value']=0
 
 
 def paste_and_complete():
@@ -159,7 +165,7 @@ btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
-cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
+cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, bootstyle='primary')
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
 # hotkey autocall option
@@ -172,7 +178,6 @@ cbb_actions.grid(row=0, column=1, sticky='ns', padx=5, pady=5)
 btn_paste.grid(row=0, column=2)
 btn_gpt.grid(row=0, column=3, padx=5, pady=5)
 btn_autocall.grid(row=0, column=4, padx=5)
-
 
 # Model parameters box
 modelbox = ttk.Frame(frame)
@@ -210,6 +215,8 @@ profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
 txt_output.grid(row=5, columnspan=3, sticky='nsew')
+progress_gpt = ttk.Progressbar(frame, mode='indeterminate')
+progress_gpt.grid(row=6, column=0, columnspan=3, sticky='ew', pady=10)
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
              + '\nYou can also type text here and press Ctrl+Enter to run GPT.')

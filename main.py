@@ -1,8 +1,10 @@
 import os
 import time
 import ttkbootstrap as ttk
-from ttkbootstrap.scrolled import ScrolledText
 import tkinter as tk
+# ttkboostratp ScrolledText messes up a few things, including key binding.
+# We stay with ye good ole scrolledtext
+from tkinter import scrolledtext
 import keyboard
 import mouse
 import config
@@ -122,12 +124,12 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT, autohide=True)
+txt_input = scrolledtext.ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT)
 txt_input.columnconfigure(0, weight=1)
-txt_input.rowconfigure(0, weight=1)
+txt_input.rowconfigure(0, weight=2)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
-txt_output = ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT, autohide=True)
+txt_output = scrolledtext.ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT)
 txt_output.columnconfigure(0, weight=1)
 txt_output.rowconfigure(2, weight=1)
 
@@ -152,9 +154,10 @@ cbb_profiles.grid(row=0, column=1, padx=5, sticky='e')
 
 # Action box
 actionbox = ttk.Frame(frame)
-btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard)
+btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, bootstyle='secondary')
 btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
 # action menu
+lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
 cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
 cbb_actions.state(['readonly'])
@@ -163,6 +166,13 @@ cbb_actions.set(config.action_first())
 v_autocall = tk.IntVar()
 v_autocall.set(config.autocall())
 btn_autocall = ttk.Checkbutton(actionbox, variable=v_autocall, text='Auto call with hotkey ' + config.hotkey())
+# actionbox layout
+lbl_action.grid(row=0, column=0)
+cbb_actions.grid(row=0, column=1, sticky='ns', padx=5, pady=5)
+btn_paste.grid(row=0, column=2)
+btn_gpt.grid(row=0, column=3, padx=5, pady=5)
+btn_autocall.grid(row=0, column=4, padx=5)
+
 
 # Model parameters box
 modelbox = ttk.Frame(frame)
@@ -171,21 +181,18 @@ lbl_models = ttk.Label(modelbox, text='Model:')
 cbb_models = ttk.Combobox(modelbox, values=config.models())
 cbb_models.state(['readonly'])
 cbb_models.set(config.models()[0])
-
 # temperature display
 v_temperature = tk.StringVar()
 v_temperature.set(str(config.temperature()))
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
 scl_temperature = ttk.Scale(modelbox, from_=0, to=1, value=config.temperature(), command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
-
 # max_tokens display
 v_max_tokens = tk.StringVar()
 v_max_tokens.set(str(config.max_tokens()))
 lbl_max_tokens = ttk.Label(modelbox, text='Maximum Output Tokens (Words):')
 scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, value=config.max_tokens(), command=set_max_tokens, length=150)
 lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)
-
 # modelbox layout
 lbl_models.grid(row=0, column=0, sticky='e')
 cbb_models.grid(row=0, column=1, padx=5, sticky='e')
@@ -196,18 +203,12 @@ lbl_max_tokens.grid(row=0, column=5, padx=5, sticky='e')
 scl_max_tokens.grid(row=0, column=6, columnspan=2, sticky='ew')
 lbl_max_tokens_value.grid(row=0, column=8, padx=5, sticky='e')
 
-# actionbox layout
-btn_paste.grid(row=0)
-cbb_actions.grid(row=0, column=1, sticky='ns', padx=10, pady=5)
-btn_gpt.grid(row=0, column=2, padx=5, pady=5)
-btn_autocall.grid(row=0, column=3, padx=5)
-
 # master frame layout
 txt_input.grid(row=0, column=0, columnspan=3, sticky='nsew')
 tokencount.grid(row=1, column=0, sticky='w', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
-actionbox.grid(row=3, column=0, sticky='w', pady=5)
-modelbox.grid(row=4, column=0, sticky='w', pady=5)
+modelbox.grid(row=3, column=0, sticky='w', pady=5)
+actionbox.grid(row=4, column=0, sticky='w', pady=5)
 txt_output.grid(row=5, columnspan=3, sticky='nsew')
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()

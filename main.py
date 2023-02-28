@@ -45,8 +45,12 @@ def set_max_tokens(v):
 
 
 def paste_clipboard():
-    text = root.clipboard_get()
-    replace_text(txt_input, text)
+    try:
+        text = root.clipboard_get()
+        replace_text(txt_input, text)
+    except tk.TclError:
+        replace_text(txt_output, 'Sorry, clipboard "copy" operation failed in source application.'
+                                 ' Maybe it is too slow to react or uses the hotkey for something else.')
 
 
 def gpt_completion():
@@ -76,11 +80,7 @@ def paste_and_complete():
     # Force source app to copy to clipboard and wait a little
     keyboard.send(config.copy_key())
     time.sleep(config.hotkey_wait())
-    try:
-        paste_clipboard()
-    except tk.TclError:
-        replace_text(txt_output, 'Sorry, clipboard "copy" operation failed in source application.'
-                                 ' Maybe it is too slow to react or uses the hotkey for something else.')
+    paste_clipboard()
     if v_autocall.get():
         gpt_completion()
 
@@ -160,12 +160,12 @@ cbb_profiles.grid(row=0, column=1, padx=5, sticky='e')
 
 # Action box
 actionbox = ttk.Frame(frame)
-btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, bootstyle='secondary')
-btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion)
+btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=10)
+btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=10)
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
-cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action, bootstyle='primary')
+cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
 # hotkey autocall option

@@ -30,11 +30,11 @@ def name():
 
 
 def models():
-    return selected()['settings']['models']
+    return selected()['settings'].get('models', default_profile()['settings']['models'])
 
 
 def chat_models():
-    return selected()['settings'].get('chat_models', [])
+    return selected()['settings'].get('chat_models', default_profile()['settings']['chat_models'])
 
 
 def all_models():
@@ -50,7 +50,7 @@ def action_first():
 
 
 def action_text(choice):
-    return selected()['actions'][choice] if choice in selected()['actions'] else ''
+    return selected()['actions'].get(choice, '')
 
 
 def default_profile():
@@ -88,8 +88,6 @@ def max_tokens():
 def validate_profile(p):
     if 'settings' not in p or 'name' not in p['settings']:
         raise ValueError('missing mandatory property settings.name')
-    if 'settings' not in p or 'models' not in p['settings'] or len(p['settings']['models']) == 0:
-        raise ValueError('missing or empty mandatory property settings.models')
     if 'actions' not in p or len(p['actions']) == 0:
         raise ValueError('missing or empty mandatory property settings.actions')
 

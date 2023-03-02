@@ -58,5 +58,4 @@ To define a new profile:
 * Create a new .toml file in the program's directory
 * Use the default profile as a template for the syntax of the properties.
 * Mandatory: *settings.name*
-* Mandatory: *settings.models*
 * Mandatory: *actions*

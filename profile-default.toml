@@ -5,7 +5,7 @@
 [settings]
 # MANDATORY in custom profile
 name  = "Default"
-# MANDATORY in custom profile
+# OPTIONAL in custom profile
 # Model names taken from https://platform.openai.com/playground
 models = ['text-davinci-003', 'code-davinci-002']
 # OPTIONAL in custom profile

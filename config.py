@@ -33,6 +33,14 @@ def models():
     return selected()['settings']['models']
 
 
+def chat_models():
+    return selected()['settings']['chat_models'] or []
+
+
+def all_models():
+    return models() + chat_models()
+
+
 def action_choices():
     return [k for k in selected()['actions'].keys()]
 

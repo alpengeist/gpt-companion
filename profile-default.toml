@@ -3,12 +3,17 @@
 # To reduce redundancy, custom profiles overwrite the defaults.
 #
 [settings]
-# MANDATORY in custom model
+# MANDATORY in custom profile
 name  = "Default"
-# MANDATORY in custom model
+# MANDATORY in custom profile
 # Model names taken from https://platform.openai.com/playground
 # I never use the simpler models for anything, so I left them out
 models = ['text-davinci-003', 'text-curie-001', 'code-davinci-002']
+# OPTIONAL in custom profile
+# Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
+# a different HTTP endpoint.
+# The companion does not implement a chat. It is using one-off requests with no history.
+chat_models = ['gpt-3.5-turbo']
 
 # key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text. The first entry is the default.

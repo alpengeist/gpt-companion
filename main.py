@@ -15,8 +15,8 @@ def change_profile(e):
     menu_actions.delete(0, len(config.action_choices())+1)
     config.select(cbb_profiles.get())
     build_action_menu(menu_actions)
-    cbb_models.configure(values=config.models())
-    cbb_models.set(config.models()[0])
+    cbb_models.configure(values=config.all_models())
+    cbb_models.set(config.all_models()[0])
     cbb_actions.configure(values=config.action_choices())
     v_action.set(config.action_first())
 
@@ -61,16 +61,25 @@ def gpt_completion():
     try:
         progress_gpt.step(5)
         frame.update()
-        res = gpt.completion(prefix=prefix, text=text, temperature=float(v_temperature.get()),
-                             model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
+        model = cbb_models.get()
+        if model in config.chat_models():
+            res = gpt.chat_completion(
+                prefix=prefix, text=text, temperature=float(v_temperature.get()),
+                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
+        else:
+            res = gpt.completion(
+                prefix=prefix, text=text, temperature=float(v_temperature.get()),
+                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
         txt_output.delete('1.0', tk.END)
-        for event in res:
-            txt_output.insert(tk.END, event['choices'][0]['text'])
+        for t in res:
+            txt_output.insert(tk.END, t)
             txt_output.see(tk.END)
             progress_gpt.step()
             txt_output.update()
+    except RuntimeError as e:
+        replace_text(txt_output, f'{e=}')
     finally:
-        progress_gpt['value']=0
+        progress_gpt['value'] = 0
 
 
 def paste_and_complete():
@@ -183,9 +192,9 @@ btn_autocall.grid(row=0, column=4, padx=5)
 modelbox = ttk.Frame(frame)
 # model menu
 lbl_models = ttk.Label(modelbox, text='Model:')
-cbb_models = ttk.Combobox(modelbox, values=config.models())
+cbb_models = ttk.Combobox(modelbox, values=config.all_models())
 cbb_models.state(['readonly'])
-cbb_models.set(config.models()[0])
+cbb_models.set(config.all_models()[0])
 # temperature display
 v_temperature = tk.StringVar()
 v_temperature.set(str(config.temperature()))

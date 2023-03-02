@@ -17,6 +17,13 @@ It can display a popup menu with all configured actions in place right at mouse 
 The Companion can stay on top of all windows, also configurable.
 See the configuration section below.
 
+## OpenAI Chat Models
+The companion can use the chat models, however not in a chat-like fashion. The OpenAI API
+has a specific endpoint for chat models, which works different to the other models.
+The companion keeps no history of the Q&A with the model, which would be required to make it "chatty".
+
+The chat models must be listed separately in a profile config. See __profile-default.toml__ how to do it.
+
 ## Prerequisites
 Python 3.11
 
@@ -47,6 +54,3 @@ To define a new profile:
 * Mandatory: *settings.name*
 * Mandatory: *settings.models*
 * Mandatory: *actions*
-
-## Future Ideas
-* Optional: Issue a paste keyboard command after GPT is finished. This could integrate GPT seamlessly in any text application.

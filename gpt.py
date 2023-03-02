@@ -1,6 +1,8 @@
 import openai
 import os
 
+import config
+
 
 def get_apikey():
     return os.getenv('OPENAI_KEY')
@@ -24,7 +26,8 @@ def completion(prefix='', text='', temperature=0.7, model='ext-davinci-003', max
 
 def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000):
     messages = [
-        {'role': 'user', 'content': prefix + text}
+        {'role': 'system', 'content': prefix},  # general instruction to the chat
+        {'role': 'user', 'content': text}
     ]
     print(f"model={model}, temperature={temperature}\n{messages}")
     try:
@@ -33,7 +36,7 @@ def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', 
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
-            stream=False     # streaming is broken
+            stream=False     # streaming is broken as of v0.27
         )
         return [ev['choices'][0]['message']['content']]
     except openai.error.OpenAIError as e:

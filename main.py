@@ -2,9 +2,6 @@ import os
 import time
 import ttkbootstrap as ttk
 import tkinter as tk
-# ttkboostratp ScrolledText messes up a few things, including key binding.
-# We stay with ye good ole scrolledtext
-from tkinter import scrolledtext
 import keyboard
 import mouse
 import config
@@ -56,10 +53,10 @@ def paste_clipboard():
 def gpt_completion():
     text = txt_input.get('1.0', tk.END)
     prefix = config.action_text(cbb_actions.get())
-    replace_text(txt_output, 'working on it...')
+    replace_text(txt_output, '')
     txt_output.update()
     try:
-        progress_gpt.step(5)
+        progress_gpt['text'] = 'GPT is running...'
         frame.update()
         model = cbb_models.get()
         if model in config.chat_models():
@@ -74,12 +71,11 @@ def gpt_completion():
         for t in res:
             txt_output.insert(tk.END, t)
             txt_output.see(tk.END)
-            progress_gpt.step()
             txt_output.update()
     except RuntimeError as e:
         replace_text(txt_output, f'{e=}')
     finally:
-        progress_gpt['value'] = 0
+        progress_gpt['text'] = 'Done.'
 
 
 def paste_and_complete():
@@ -139,14 +135,23 @@ frame.columnconfigure(0, weight=1)
 frame.rowconfigure(0, weight=1)
 
 # INPUT and OUTPUT text fields
-txt_input = scrolledtext.ScrolledText(frame, width=100, height=10, wrap=tk.WORD, relief=tk.FLAT)
-txt_input.columnconfigure(0, weight=1)
-txt_input.rowconfigure(0, weight=1)
+# The ScrolledText widget does not support the ^A key (select_range), so forget it.
+# Attaching a scrollbar to a text widget is not so difficult after all.
+# The ttkbootstrap scrollbar in the dark theme is almost invisible. We stay with the Tk scrollbar.
+inputbox = ttk.Frame(frame)
+txt_input = ttk.Text(inputbox, height=10, wrap=tk.WORD, relief=tk.FLAT)
+scroll_input = tk.Scrollbar(inputbox, orient=tk.VERTICAL, command=txt_input.yview)
+txt_input.config(yscrollcommand=scroll_input.set)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
+txt_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+scroll_input.pack(side=tk.RIGHT, fill=tk.Y)
 
-txt_output = scrolledtext.ScrolledText(frame, height=10, wrap=tk.WORD, relief=tk.FLAT)
-txt_output.columnconfigure(0, weight=1)
-txt_output.rowconfigure(2, weight=1)
+outputbox = ttk.Frame(frame)
+txt_output = ttk.Text(outputbox, height=10, wrap=tk.WORD, relief=tk.FLAT)
+scroll_output = tk.Scrollbar(outputbox, orient=tk.VERTICAL, command=txt_output.yview)
+txt_output.config(yscrollcommand=scroll_output.set)
+txt_output.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+scroll_output.pack(side=tk.RIGHT, fill=tk.Y)
 
 # token counter
 tokencount = ttk.Frame(frame)
@@ -218,13 +223,15 @@ scl_max_tokens.grid(row=0, column=6, columnspan=2, sticky='ew')
 lbl_max_tokens_value.grid(row=0, column=8, padx=5, sticky='e')
 
 # master frame layout
-txt_input.grid(row=0, column=0, columnspan=3, sticky='nsew')
+inputbox.grid(row=0, column=0, sticky='nsew')
+frame.rowconfigure(0, weight=5)
 tokencount.grid(row=1, column=0, sticky='w', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
-txt_output.grid(row=5, columnspan=3, sticky='nsew')
-progress_gpt = ttk.Progressbar(frame, mode='indeterminate')
+outputbox.grid(row=5, columnspan=3, sticky='ewns')
+frame.rowconfigure(5, weight=2)
+progress_gpt = ttk.Label(frame)
 progress_gpt.grid(row=6, column=0, columnspan=3, sticky='ew', pady=10)
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()

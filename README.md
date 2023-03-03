@@ -3,20 +3,26 @@
 ## What it does
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
-The GPT companion tool works in similar ways.
+The GPT companion tool works in similar ways. You select some text in a source
+application and press the configurable hotkey crtl-alt-g. The Companion will
+call GPT-3 for you and display the result.
 
-Select text in any application and send it to the companion via hot key.
-Configure your favorite GPT-3 text processing tasks and let the companion call
-GPT-3 for you.
+Configure your favorite GPT-3 text processing tasks in profiles, which you can
+switch at runtime. For instance, you could have one profile for English,
+one for German, one for fun stuff, etc.
+
+With the hotkey it can display a popup menu with the actions at the
+mouse position in any application. This feature is configurable.
+
+Once the selected text is copied to the Companion, you can start playing with the GPT parameters
+or try different models.
 
 The companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste the text yourself and fiddle with the
 same prompts over and over again. You never have to leave the source application.
 Just run the companion, put it aside and feed it with text.
 
-It can display a popup menu with all configured actions at the mouse's position in any application.
-This feature is configurable.
-The Companion can also stay on top of all windows, which is also configurable. Please see the configuration section below.
+The Companion can also stay on top of all windows, which is also configurable.
 
 ## OpenAI Chat Models
 

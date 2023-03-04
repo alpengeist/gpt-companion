@@ -224,13 +224,13 @@ lbl_max_tokens_value.grid(row=0, column=8, padx=5, sticky='e')
 
 # master frame layout
 inputbox.grid(row=0, column=0, sticky='nsew')
-frame.rowconfigure(0, weight=5)
+frame.rowconfigure(0, weight=0)
 tokencount.grid(row=1, column=0, sticky='w', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
 outputbox.grid(row=5, columnspan=3, sticky='ewns')
-frame.rowconfigure(5, weight=2)
+frame.rowconfigure(5, weight=1)
 progress_gpt = ttk.Label(frame)
 progress_gpt.grid(row=6, column=0, columnspan=3, sticky='ew', pady=10)
 

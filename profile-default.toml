@@ -11,7 +11,7 @@ models = ['text-davinci-003', 'code-davinci-002']
 # OPTIONAL in custom profile
 # Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
 # a different HTTP endpoint. The companion does not implement a chat. It is using single requests with no history.
-chat_models = ['gpt-3.5-turbo']
+chat_models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
 
 # key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text. The first entry is the default.
@@ -46,6 +46,3 @@ hotkey = 'alt+ctrl+g'
 # After the waiting time the companion sends COPY_KEY keypress to the app.
 # If you notice that selected text is not copied, try increasing the time or use another hotkey.
 hotkey_wait = 1  # seconds
-# the general font
-font="Segoe UI Variable Display"
-font_size=11

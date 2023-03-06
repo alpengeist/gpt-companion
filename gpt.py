@@ -26,8 +26,8 @@ def completion(prefix='', text='', temperature=0.7, model='ext-davinci-003', max
 
 def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000):
     messages = [
-        {'role': 'system', 'content': prefix},  # general instruction to the chat
-        {'role': 'user', 'content': text}
+        {'role': 'system', 'content': 'Be precise and concise'},  # general instruction to the chat
+        {'role': 'user', 'content': prefix + text}
     ]
     print(f"model={model}, temperature={temperature}\n{messages}")
     try:

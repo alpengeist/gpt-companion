@@ -100,6 +100,7 @@ def read_config_profile(filename):
 
 
 def read_all_profiles():
+    profiles.clear()
     files = glob.glob('*.toml')
     files.sort()
     for f in files:

@@ -1,8 +1,6 @@
 import openai
 import os
 
-import config
-
 
 def get_apikey():
     return os.getenv('OPENAI_KEY')

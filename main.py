@@ -121,6 +121,12 @@ def hotkey_pressed():
         paste_and_complete()
 
 
+def reload_profiles():
+    config.read_all_profiles()
+    change_profile(None)
+
+
+BTN_WIDTH=10
 root = ttk.Window(themename='darkly')
 if config.startup()['on_top']:
     root.attributes('-topmost',1)
@@ -169,13 +175,15 @@ cbb_profiles = ttk.Combobox(profilebox, values=config.profile_choices())
 cbb_profiles.state(['readonly'])
 cbb_profiles.set(config.name())
 cbb_profiles.bind('<<ComboboxSelected>>', change_profile)
+btn_reload = ttk.Button(profilebox, text='Reload', width=BTN_WIDTH, command=reload_profiles)
 lbl_profiles.grid(row=0, column=0, sticky='w')
 cbb_profiles.grid(row=0, column=1, padx=5, sticky='e')
+btn_reload.grid(row=0, column=2)
 
 # Action box
 actionbox = ttk.Frame(frame)
-btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=10)
-btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=10)
+btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=BTN_WIDTH)
+btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=BTN_WIDTH)
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()

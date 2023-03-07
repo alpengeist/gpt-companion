@@ -4,7 +4,7 @@ import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
-import keyboard
+#import keyboard
 import config
 import gpt
 
@@ -83,14 +83,14 @@ def paste_and_complete():
     # Give app time to settle from hotkey
     time.sleep(config.hotkey_wait())
     # Force source app to copy to clipboard and wait a little
-    keyboard.send('ctrl+c')
-#    c = pynput.keyboard.Controller()
-#    if sys.platform == 'darwin':
-#        with c.pressed(pynput.keyboard.Key.cmd):
-#            c.press('c')
-#    else:
-#        with c.pressed(pynput.keyboard.Key.ctrl):
-#            c.press('c')
+    #keyboard.send('ctrl+c')
+    c = pynput.keyboard.Controller()
+    if sys.platform == 'darwin':
+        with c.pressed(pynput.keyboard.Key.cmd):
+            c.press('c')
+    else:
+        with c.pressed(pynput.keyboard.Key.ctrl):
+            c.press('c')
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():
@@ -112,7 +112,7 @@ def build_action_menu(m):
 
 def pop_action_menu():
     menu_actions.post(mouse_pos[0], mouse_pos[1])
-    menu_actions.focus_set()
+    #menu_actions.focus_set()
 
 
 def hide_action_menu():
@@ -133,13 +133,30 @@ def hotkey_pressed():
 
 
 def bind_keyboard_and_mouse():
-    # too much trouble with MacOS for now
-    if sys.platform != 'darwin':
-        mlistener = pynput.mouse.Listener(on_move=mouse_moved)
-        mlistener.start()
-        keyboard.add_hotkey(config.hotkey(), pop_action_menu)
-    #klistener = pynput.keyboard.GlobalHotKeys({config.startup()['hotkey']: pop_action_menu})
-    #klistener.start()
+    #if sys.platform != 'darwin':
+    mlistener = pynput.mouse.Listener(on_move=mouse_moved)
+    mlistener.start()
+    #keyboard.add_hotkey(config.hotkey(), pop_action_menu)
+
+    def release(k):
+        #print(f'release {k}')
+        hotkey.release(klistener.canonical(k))
+
+    def press(k):
+        #print(f'press {k}')
+        hotkey.press(klistener.canonical(k))
+
+    # Popups don't go well with pynput HotKey because they snatch all the key releases.
+    # This messes up the internal state management of the HotKey instance. We help him by releasing the keys.
+    def activate():
+        for k in pk:
+            release(k)
+        pop_action_menu()
+
+    pk = pynput.keyboard.HotKey.parse(config.hotkey())
+    hotkey = pynput.keyboard.HotKey(pk, activate)
+    klistener = pynput.keyboard.Listener(on_press=press, on_release=release)
+    klistener.start()
 
 
 def reload_profiles():

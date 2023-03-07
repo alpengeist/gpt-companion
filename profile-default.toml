@@ -40,7 +40,9 @@ autocall = 1
 # enable/disable in-place action popup after hot key has been pressed
 action_popup = 1
 
-hotkey = 'alt+ctrl+G'
+# The pynput module may have trouble with <ctrl> and <alt> on MacOS. Use <cmd> and <shift> instead.
+# hotkey = '<cmd>+<shift>+g'
+hotkey = '<ctrl>+<alt>+g'
 # Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
 # After the waiting time the companion sends COPY_KEY keypress to the app.
 # If you notice that selected text is not copied, try increasing the time or use another hotkey.

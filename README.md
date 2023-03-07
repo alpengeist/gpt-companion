@@ -40,12 +40,11 @@ Python 3.11
 
 Tested and developed under Windows 11
 
-I have too much trouble finding a reliable platform-independent module for keyboard and mouse handling. Therefore, __on MacOS
-there is currently no support for the hotkey feature__
-
 ## Installation
 
 `pip install -r requirements.txt`
+
+To allow the Companion read the keyboard and mouse on MacOS, please see the section MacOS under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html)
 
 ## Run
 

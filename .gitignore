@@ -1,5 +1,6 @@
 .idea
 test*.toml
+testenv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

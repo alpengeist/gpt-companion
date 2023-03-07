@@ -1,9 +1,9 @@
 import os
+import sys
 import time
 import ttkbootstrap as ttk
 import tkinter as tk
-import keyboard
-from pynput import mouse
+import pynput
 import config
 import gpt
 
@@ -81,9 +81,14 @@ def gpt_completion():
 def paste_and_complete():
     # Give app time to settle from hotkey
     time.sleep(config.hotkey_wait())
-    # print('sending ctrl+c')
     # Force source app to copy to clipboard and wait a little
-    keyboard.send(config.copy_key())
+    c = pynput.keyboard.Controller()
+    if sys.platform == 'darwin':
+        with c.pressed(pynput.keyboard.Key.cmd):
+            c.press('c')
+    else:
+        with c.pressed(pynput.keyboard.Key.ctrl):
+            c.press('c')
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():
@@ -104,8 +109,6 @@ def build_action_menu(m):
 
 
 def pop_action_menu():
-    #pos = mouse.get_position()
-    #menu_actions.post(pos[0], pos[1])
     menu_actions.post(mouse_pos[0], mouse_pos[1])
     menu_actions.focus_set()
 
@@ -125,6 +128,13 @@ def hotkey_pressed():
         pop_action_menu()
     else:
         paste_and_complete()
+
+
+def bind_keybord_and_mouse():
+    mlistener = pynput.mouse.Listener(on_move=mouse_moved)
+    mlistener.start()
+    klistener = pynput.keyboard.GlobalHotKeys({config.startup()['hotkey']: pop_action_menu})
+    klistener.start()
 
 
 def reload_profiles():
@@ -255,10 +265,7 @@ replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use
 
 menu_actions = tk.Menu(root, tearoff=0)
 build_action_menu(menu_actions)
-keyboard.add_hotkey(config.hotkey(), hotkey_pressed)
-listener = mouse.Listener(
-    on_move=mouse_moved)
-listener.start()
+bind_keybord_and_mouse()
 
 if __name__ == '__main__':
     if not os.getenv('OPENAI_KEY'):

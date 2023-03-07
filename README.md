@@ -40,11 +40,12 @@ Python 3.11
 
 Tested and developed under Windows 11
 
+I have too much trouble finding a reliable platform-independent module for keyboard and mouse handling. Therefore, __on MacOS
+there is currently no support for the hotkey feature__
+
 ## Installation
 
 `pip install -r requirements.txt`
-
-The **keyboard** module, which is required for the hot key handling, works under Linux as well. MacOS is experimental.
 
 ## Run
 

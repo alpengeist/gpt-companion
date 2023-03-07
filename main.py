@@ -83,13 +83,14 @@ def paste_and_complete():
     # Give app time to settle from hotkey
     time.sleep(config.hotkey_wait())
     # Force source app to copy to clipboard and wait a little
-    c = pynput.keyboard.Controller()
-    if sys.platform == 'darwin':
-        with c.pressed(pynput.keyboard.Key.cmd):
-            c.press('c')
-    else:
-        with c.pressed(pynput.keyboard.Key.ctrl):
-            c.press('c')
+    keyboard.send('ctrl+c')
+#    c = pynput.keyboard.Controller()
+#    if sys.platform == 'darwin':
+#        with c.pressed(pynput.keyboard.Key.cmd):
+#            c.press('c')
+#    else:
+#        with c.pressed(pynput.keyboard.Key.ctrl):
+#            c.press('c')
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():
@@ -125,16 +126,18 @@ def mouse_moved(x, y):
 
 
 def hotkey_pressed():
-    if config.startup()['action_popup']:
+    if config.action_popup():
         pop_action_menu()
     else:
         paste_and_complete()
 
 
-def bind_keybord_and_mouse():
-    mlistener = pynput.mouse.Listener(on_move=mouse_moved)
-    mlistener.start()
-    keyboard.add_hotkey(config.startup()['hotkey'], pop_action_menu)
+def bind_keyboard_and_mouse():
+    # too much trouble with MacOS for now
+    if sys.platform != 'darwin':
+        mlistener = pynput.mouse.Listener(on_move=mouse_moved)
+        mlistener.start()
+        keyboard.add_hotkey(config.hotkey(), pop_action_menu)
     #klistener = pynput.keyboard.GlobalHotKeys({config.startup()['hotkey']: pop_action_menu})
     #klistener.start()
 
@@ -267,7 +270,7 @@ replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use
 
 menu_actions = tk.Menu(root, tearoff=0)
 build_action_menu(menu_actions)
-bind_keybord_and_mouse()
+bind_keyboard_and_mouse()
 
 if __name__ == '__main__':
     if not os.getenv('OPENAI_KEY'):

@@ -84,6 +84,10 @@ def max_tokens():
     return startup()['max_tokens']
 
 
+def action_popup():
+    return startup()['action_popup']
+
+
 def validate_profile(p):
     if 'settings' not in p or 'name' not in p['settings']:
         raise ValueError('missing mandatory property settings.name')

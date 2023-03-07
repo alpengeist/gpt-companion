@@ -23,7 +23,7 @@ chat_models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
 "Fix Grammar"= "fix the grammar of the following text:\n"
 "More idiomatic"= "write the following text in a more idiomatic style:\n"
 "Explain Word"= "explain the word "
-"Alternative Words"= "name altenative words for:\n"
+"Alternative Words"= "name alternative words for:\n"
 "Opposite"= "name the opposite of:\n"
 "Typical Sentence"= "write a typical sentence with:\n"
 

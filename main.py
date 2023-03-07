@@ -4,6 +4,7 @@ import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
+import keyboard
 import config
 import gpt
 
@@ -133,8 +134,9 @@ def hotkey_pressed():
 def bind_keybord_and_mouse():
     mlistener = pynput.mouse.Listener(on_move=mouse_moved)
     mlistener.start()
-    klistener = pynput.keyboard.GlobalHotKeys({config.startup()['hotkey']: pop_action_menu})
-    klistener.start()
+    keyboard.add_hotkey(config.startup()['hotkey'], pop_action_menu)
+    #klistener = pynput.keyboard.GlobalHotKeys({config.startup()['hotkey']: pop_action_menu})
+    #klistener.start()
 
 
 def reload_profiles():

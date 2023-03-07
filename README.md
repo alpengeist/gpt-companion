@@ -40,6 +40,8 @@ Python 3.11
 
 Tested and developed under Windows 11
 
+*I am trying my best for the MacOS version. As I don't have a Mac myself, it's a bit difficult*
+
 ## Installation
 
 `pip install -r requirements.txt`

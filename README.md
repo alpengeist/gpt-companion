@@ -3,28 +3,26 @@
 ## What it does
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
-The GPT companion tool works in similar ways. You select some text in a source
+The GPT Companion tool works in similar ways. You select some text in a source
 application and press the configurable hotkey crtl-alt-g. The Companion will
 call GPT-3 for you and display the result.
 
-Configure your preferred GPT-3 text processing tasks into profiles, which you can switch between at runtime. For example, you could have a profile for English, one for German, one for fun stuff, etc. You can reload all profiles while the program is running.
+Configure your preferred GPT-3 text processing actions into profiles, which you can switch between at runtime. 
+For example, you could have a profile for English, one for German, one for fun stuff, etc. 
+An action did not work as expected? A new action comes to mind? Just edit the profile, press the _Reload_ button and run GPT again.
 
-With the hotkey it can display a popup menu with the taks at the
+With the hotkey it can display a popup menu with the actions at the
 mouse position in any application. This feature is configurable.
-
-Once the selected text is copied to the Companion, you can start playing with the GPT parameters
-or try different models.
 
 The companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste the text yourself and fiddle with the
-same prompts over and over again. You never have to leave the source application.
-Just run the companion, put it aside and feed it with text.
+same prompts over and over again. Just run the Companion, put it aside and feed it with text.
 
 The Companion can also stay on top of all windows, which is also configurable.
 
 ## OpenAI Chat Models
 
-The companion can use the chat models, however not in a chat-like fashion. The OpenAI API
+The Companion can use the chat models, however not in a chat-like fashion. The OpenAI API
 has a specific endpoint for chat models, which works differently than the other models.
 The companion keeps no history of the Q&A with the model, which would be required to make it "chatty".
 
@@ -44,13 +42,7 @@ Tested and developed under Windows 11
 
 `pip install -r requirements.txt`
 
-To allow the Companion read the keyboard and mouse on MacOS, please see the section MacOS under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html)
-
-## Run
-
-`python3 main.py`
-
-The program must be run in its directory, otherwise the configuration profiles will not be found.
+To allow the Companion read the keyboard and mouse on MacOS, please see the section _MacOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html)
 
 ## Configuration
 
@@ -65,3 +57,9 @@ To define a new profile:
 * Use the default profile as a template for the syntax of the properties.
 * Mandatory: *settings.name*
 * Mandatory: *actions*
+
+## Run
+
+`python3 main.py`
+
+The program must be run in its directory, otherwise the configuration profiles will not be found.

@@ -23,11 +23,11 @@ def replace_text(widget, text):
     widget.delete('1.0', tk.END)
     widget.insert('1.0', text)
     if widget == txt_input:
-        set_tokencount(text)
+        set_wordcount(text)
 
 
-def set_tokencount(text):
-    v_tokencount.set(str(len(text.split())))
+def set_wordcount(text):
+    v_wordcount.set(str(len(text.split())))
 
 
 def set_temperature(v):
@@ -89,9 +89,13 @@ def paste_and_complete():
     if sys.platform == 'darwin':
         with c.pressed(pynput.keyboard.Key.cmd):
             c.press('c')
+            c.release('c')
+            c.release(pynput.keyboard.Key.cmd)
     else:
         with c.pressed(pynput.keyboard.Key.ctrl):
             c.press('c')
+            c.release('c')
+            c.release(pynput.keyboard.Key.ctrl)
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():
@@ -188,27 +192,27 @@ frame.rowconfigure(0, weight=1)
 # The ttkbootstrap scrollbar in the dark theme is almost invisible. We stay with the Tk scrollbar.
 inputbox = ttk.Frame(frame)
 txt_input = ttk.Text(inputbox, height=10, wrap=tk.WORD, relief=tk.FLAT)
-scroll_input = tk.Scrollbar(inputbox, orient=tk.VERTICAL, command=txt_input.yview)
+scroll_input = ttk.Scrollbar(inputbox, orient=tk.VERTICAL, command=txt_input.yview, bootstyle='light')
 txt_input.config(yscrollcommand=scroll_input.set)
-txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 txt_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scroll_input.pack(side=tk.RIGHT, fill=tk.Y)
+txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
 outputbox = ttk.Frame(frame)
 txt_output = ttk.Text(outputbox, height=10, wrap=tk.WORD, relief=tk.FLAT)
-scroll_output = tk.Scrollbar(outputbox, orient=tk.VERTICAL, command=txt_output.yview)
+scroll_output = ttk.Scrollbar(outputbox, orient=tk.VERTICAL, command=txt_output.yview, bootstyle='light')
 txt_output.config(yscrollcommand=scroll_output.set)
 txt_output.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scroll_output.pack(side=tk.RIGHT, fill=tk.Y)
 
 # token counter
-tokencount = ttk.Frame(frame)
-lbl_tokencount = ttk.Label(tokencount, text="Input Token Count:")
-v_tokencount = tk.StringVar()
-v_tokencount.set("0")
-lbl_tokencount_value = ttk.Label(tokencount, textvariable=v_tokencount)
-lbl_tokencount.grid(row=0, column=0, sticky="w")
-lbl_tokencount_value.grid(row=0, column=1, sticky="w")
+wordcount = ttk.Frame(frame)
+lbl_wordcount = ttk.Label(wordcount, text="Input Word Count:")
+v_wordcount = tk.StringVar()
+v_wordcount.set("0")
+lbl_wordcount_value = ttk.Label(wordcount, textvariable=v_wordcount)
+lbl_wordcount.grid(row=0, column=0, sticky="w")
+lbl_wordcount_value.grid(row=0, column=1, sticky="w")
 
 # Profile menu
 profilebox = ttk.Frame(frame)
@@ -225,7 +229,7 @@ btn_reload.grid(row=0, column=2)
 # Action box
 actionbox = ttk.Frame(frame)
 btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=BTN_WIDTH)
-btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=BTN_WIDTH)
+btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=BTN_WIDTH, bootstyle='success')
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
@@ -275,7 +279,7 @@ lbl_max_tokens_value.grid(row=0, column=8, padx=5, sticky='e')
 # master frame layout
 inputbox.grid(row=0, column=0, sticky='nsew')
 frame.rowconfigure(0, weight=0)
-tokencount.grid(row=1, column=0, sticky='w', pady=(5, 10))
+wordcount.grid(row=1, column=0, sticky='w', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)

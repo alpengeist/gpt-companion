@@ -4,13 +4,13 @@ import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
-#import keyboard
+# import keyboard
 import config
 import gpt
 
 
 def change_profile(e):
-    menu_actions.delete(0, len(config.action_choices())+1)
+    menu_actions.delete(0, len(config.action_choices()) + 1)
     config.select(cbb_profiles.get())
     build_action_menu(menu_actions)
     cbb_models.configure(values=config.all_models())
@@ -63,7 +63,8 @@ def gpt_completion():
         if model in config.chat_models():
             res = gpt.chat_completion(
                 prefix=prefix, text=text, temperature=float(v_temperature.get()),
-                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
+                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()),
+                instruction=config.chat_instruction())
         else:
             res = gpt.completion(
                 prefix=prefix, text=text, temperature=float(v_temperature.get()),
@@ -83,7 +84,7 @@ def paste_and_complete():
     # Give app time to settle from hotkey
     time.sleep(config.hotkey_wait())
     # Force source app to copy to clipboard and wait a little
-    #keyboard.send('ctrl+c')
+    # keyboard.send('ctrl+c')
     c = pynput.keyboard.Controller()
     if sys.platform == 'darwin':
         with c.pressed(pynput.keyboard.Key.cmd):
@@ -112,7 +113,7 @@ def build_action_menu(m):
 
 def pop_action_menu():
     menu_actions.post(mouse_pos[0], mouse_pos[1])
-    #menu_actions.focus_set()
+    # menu_actions.focus_set()
 
 
 def hide_action_menu():
@@ -133,17 +134,18 @@ def hotkey_pressed():
 
 
 def bind_keyboard_and_mouse():
-    #if sys.platform != 'darwin':
+    # if sys.platform != 'darwin':
     mlistener = pynput.mouse.Listener(on_move=mouse_moved)
     mlistener.start()
-    #keyboard.add_hotkey(config.hotkey(), pop_action_menu)
+
+    # keyboard.add_hotkey(config.hotkey(), pop_action_menu)
 
     def release(k):
-        #print(f'release {k}')
+        # print(f'release {k}')
         hotkey.release(klistener.canonical(k))
 
     def press(k):
-        #print(f'press {k}')
+        # print(f'press {k}')
         hotkey.press(klistener.canonical(k))
 
     # Popups don't go well with pynput HotKey because they snatch all the key releases.
@@ -169,7 +171,7 @@ mouse_pos = ()
 
 root = ttk.Window(themename='darkly')
 if config.startup()['on_top']:
-    root.attributes('-topmost',1)
+    root.attributes('-topmost', 1)
 root.title('GPT Companion')
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)

@@ -40,6 +40,10 @@ def all_models():
     return chat_models() + models()
 
 
+def chat_instruction():
+    return selected()['settings'].get('chat_instruction', default_profile()['settings']['chat_instruction'])
+
+
 def action_choices():
     return [k for k in selected()['actions'].keys()]
 

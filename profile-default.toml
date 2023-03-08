@@ -12,6 +12,8 @@ models = ['text-davinci-003', 'code-davinci-002']
 # Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
 # a different HTTP endpoint. The companion does not implement a chat. It is using single requests with no history.
 chat_models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
+# OPTIONAL in custom profile: Chat models have a 'system' role, which gives a general instruction to the model.
+chat_instruction = "be precise and concise"
 
 # key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text. The first entry is the default.

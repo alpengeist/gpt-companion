@@ -22,9 +22,10 @@ def completion(prefix='', text='', temperature=0.7, model='ext-davinci-003', max
         raise RuntimeError(f"{e=}")
 
 
-def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000):
+def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000,
+                    instruction='Be precise and concise'):
     messages = [
-        {'role': 'system', 'content': 'Be precise and concise'},  # general instruction to the chat
+        {'role': 'system', 'content': instruction },  # general instruction to the chat
         {'role': 'user', 'content': prefix + text}
     ]
     print(f"model={model}, temperature={temperature}\n{messages}")

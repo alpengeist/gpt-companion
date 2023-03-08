@@ -7,11 +7,9 @@ The GPT companion tool works in similar ways. You select some text in a source
 application and press the configurable hotkey crtl-alt-g. The Companion will
 call GPT-3 for you and display the result.
 
-Configure your favorite GPT-3 text processing tasks in profiles, which you can
-switch at runtime. For instance, you could have one profile for English,
-one for German, one for fun stuff, etc.
+Configure your preferred GPT-3 text processing tasks into profiles, which you can switch between at runtime. For example, you could have a profile for English, one for German, one for fun stuff, etc. You can reload all profiles while the program is running.
 
-With the hotkey it can display a popup menu with the actions at the
+With the hotkey it can display a popup menu with the taks at the
 mouse position in any application. This feature is configurable.
 
 Once the selected text is copied to the Companion, you can start playing with the GPT parameters
@@ -40,7 +38,7 @@ Python 3.11
 
 Tested and developed under Windows 11
 
-*I am trying my best for the MacOS version. As I don't have a Mac myself, it's a bit difficult*
+*I'm doing my best for the MacOS version. Without having a Mac myself, this is a bit of a challenge.*.
 
 ## Installation
 

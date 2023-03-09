@@ -1,4 +1,4 @@
-# GPT-3 Companion
+# GPT Companion
 
 ## What it does
 
@@ -7,7 +7,7 @@
 Are you familiar with DeepL's desktop tool for on the fly translations?
 The GPT Companion tool works in similar ways. You select some text in a source
 application and press the configurable hotkey crtl-alt-g. The Companion will
-call GPT-3 for you and display the result.
+call GPT for you and display the result.
 
 Configure your preferred GPT-3 text processing actions into profiles, which you can switch between at runtime.
 For example, you could have a profile for English, one for German, one for fun stuff, etc.
@@ -18,17 +18,17 @@ mouse position in any application. This feature is configurable.
 
 <img alt="action popup" src="doc/popup.png" width="30%" height="30%"/>
 
-The companion is more convenient than using ChatGPT or OpenAI Playground
-where you'll have to copy&paste the text yourself and fiddle with the
-same prompts over and over again. Just run the Companion, put it aside and feed it with text.
+The app can also stay on top of all windows, which is also configurable.
 
-The Companion can also stay on top of all windows, which is also configurable.
+For working on text documents, the Companion is more convenient than using ChatGPT or OpenAI Playground
+where you'll have to copy&paste text snippets yourself and fiddle with the
+same prompts over and over again. Just run the Companion, put it aside and feed it with text.
 
 ## OpenAI Chat Models
 
-The Companion can use the chat models, however not in a chat-like fashion. The OpenAI API
-has a specific endpoint for chat models, which works differently than the other models.
-The companion keeps no history of the Q&A with the model, which would be required to make it "chatty".
+The Companion can use the chat models, however not in a chat-like fashion -  nobody needs yet another chatbot. 
+The OpenAI API has a specific endpoint for chat models, which works differently than the other models.
+The companion keeps no history of the "dialog" with the model, which would be required to make it "chatty".
 
 The chat models must be listed separately in a profile config. See __profile-default.toml__ about how to do it.
 
@@ -40,13 +40,13 @@ Python 3.11
 
 Tested and developed under Windows 11
 
-*I'm doing my best for the MacOS version. Without having a Mac myself, this is a bit of a challenge.*.
+*I'm doing my best for the macOS version. Without having a Mac myself, this is a bit of a challenge*.
 
 ## Installation
 
 `pip install -r requirements.txt`
 
-To allow the Companion read the keyboard and mouse on MacOS, please see the section _MacOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html)
+To allow the Companion read the keyboard and mouse on macOS, please see the section _MacOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html)
 
 ## Configuration
 

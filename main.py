@@ -46,7 +46,7 @@ def set_temperature(v):
 
 
 def set_max_tokens(v):
-    v = round(float(v) / 10.0) * 10  # increment in 10s
+    v = round(float(v) / 25.0) * 25
     if v == 0:
         v = 1
     v_max_tokens.set(str(v))
@@ -283,8 +283,8 @@ lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 # max_tokens display
 v_max_tokens = tk.StringVar()
 v_max_tokens.set(str(config.max_tokens()))
-lbl_max_tokens = ttk.Label(modelbox, text='Maximum Output Tokens (Words):')
-scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, value=config.max_tokens(), command=set_max_tokens, length=150)
+lbl_max_tokens = ttk.Label(modelbox, text='Max output tokens:')
+scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, value=config.max_tokens(), command=set_max_tokens, length=250)
 lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)
 # modelbox layout
 lbl_models.grid(row=0, column=0, sticky='e')

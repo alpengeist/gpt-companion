@@ -16,7 +16,7 @@ An action did not work as expected? A new action comes to mind? Just edit the pr
 With the hotkey it can display a popup menu with the actions at the
 mouse position in any application. This feature is configurable.
 
-![Hotkey Popup](doc/popup.png)
+![Hotkey Popup](doc/popup.png = 416x558)
 
 The companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste the text yourself and fiddle with the

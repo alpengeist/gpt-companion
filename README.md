@@ -1,7 +1,5 @@
 # GPT Companion
 
-## What it does
-
 <img alt="Companion App" src="doc/app.png" width="75%" height="75%"/>
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
@@ -9,7 +7,7 @@ The GPT Companion tool works in similar ways. You select some text in a source
 application and press the configurable hotkey crtl-alt-g. The Companion will
 call GPT for you and display the result.
 
-Configure your preferred GPT-3 text processing actions into profiles, which you can switch between at runtime.
+Put your preferred GPT text processing actions (prompts) into profiles, which you can switch between at runtime.
 For example, you could have a profile for English, one for German, one for fun stuff, etc.
 An action did not work as expected? A new action comes to mind? Just edit the profile, press the _Reload_ button and run GPT again.
 
@@ -67,3 +65,13 @@ To define a new profile:
 `python3 main.py`
 
 The program must be run in its directory, otherwise the configuration profiles will not be found.
+
+## Potential Features
+
+In some use cases, it may seem useful to paste the GPT output back into the source text.
+However, this is a very dangerous feature, because the focus must not be taken away
+from the text while GPT is running.
+The application lacks the capability to identify the origin of the text or determine 
+if the source application is currently in an editable input mode. That would require deep OS integration. 
+
+

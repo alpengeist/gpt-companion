@@ -23,11 +23,21 @@ def replace_text(widget, text):
     widget.delete('1.0', tk.END)
     widget.insert('1.0', text)
     if widget == txt_input:
-        set_wordcount(text)
+        set_wordcount(v_input_counter, text)
+    if widget == txt_output:
+        set_wordcount(v_output_counter, text)
 
 
-def set_wordcount(text):
-    v_wordcount.set(str(len(text.split())))
+def set_wordcount(v, text):
+    v.set(str(len(text.split())))
+
+
+def update_output_counter():
+    set_wordcount(v_output_counter, txt_output.get('1.0', tk.END))
+
+
+def update_input_counter():
+    set_wordcount(v_input_counter, txt_input.get('1.0', tk.END))
 
 
 def set_temperature(v):
@@ -55,9 +65,10 @@ def gpt_completion():
     text = txt_input.get('1.0', tk.END)
     prefix = config.action_text(cbb_actions.get())
     replace_text(txt_output, '')
-    txt_output.update()
+    update_input_counter()
+    frame.update()
     try:
-        progress_gpt['text'] = 'GPT is running...'
+        progress_gpt['text'] = GPT_RUNNING
         frame.update()
         model = cbb_models.get()
         if model in config.chat_models():
@@ -77,7 +88,8 @@ def gpt_completion():
     except RuntimeError as e:
         replace_text(txt_output, f'{e=}')
     finally:
-        progress_gpt['text'] = 'Done.'
+        progress_gpt['text'] = GPT_READY
+        update_output_counter()
 
 
 def paste_and_complete():
@@ -170,7 +182,20 @@ def reload_profiles():
     change_profile(None)
 
 
+def create_wordcount_label(parent, text):
+    wordcount = ttk.Frame(parent)
+    lbl_wordcount = ttk.Label(wordcount, text=text, bootstyle='light')
+    v_wordcount = tk.StringVar()
+    v_wordcount.set("0")
+    lbl_wordcount_value = ttk.Label(wordcount, textvariable=v_wordcount, bootstyle='light')
+    lbl_wordcount.grid(row=0, column=0, sticky="w")
+    lbl_wordcount_value.grid(row=0, column=1, sticky="w")
+    return wordcount, v_wordcount
+
+
 BTN_WIDTH = 10
+GPT_READY = 'GPT is ready.'
+GPT_RUNNING = 'GPT is working...'
 mouse_pos = ()
 
 root = ttk.Window(themename='darkly')
@@ -198,6 +223,8 @@ txt_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scroll_input.pack(side=tk.RIGHT, fill=tk.Y)
 txt_input.bind('<Control-Return>', lambda e: gpt_completion())
 
+input_counter, v_input_counter = create_wordcount_label(frame, 'Input word count:')
+
 outputbox = ttk.Frame(frame)
 txt_output = ttk.Text(outputbox, height=10, wrap=tk.WORD, relief=tk.FLAT)
 scroll_output = ttk.Scrollbar(outputbox, orient=tk.VERTICAL, command=txt_output.yview, bootstyle='light')
@@ -205,14 +232,7 @@ txt_output.config(yscrollcommand=scroll_output.set)
 txt_output.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scroll_output.pack(side=tk.RIGHT, fill=tk.Y)
 
-# token counter
-wordcount = ttk.Frame(frame)
-lbl_wordcount = ttk.Label(wordcount, text="Input Word Count:")
-v_wordcount = tk.StringVar()
-v_wordcount.set("0")
-lbl_wordcount_value = ttk.Label(wordcount, textvariable=v_wordcount)
-lbl_wordcount.grid(row=0, column=0, sticky="w")
-lbl_wordcount_value.grid(row=0, column=1, sticky="w")
+output_counter, v_output_counter = create_wordcount_label(frame, 'Output word count:')
 
 # Profile menu
 profilebox = ttk.Frame(frame)
@@ -279,17 +299,19 @@ lbl_max_tokens_value.grid(row=0, column=8, padx=5, sticky='e')
 # master frame layout
 inputbox.grid(row=0, column=0, sticky='nsew')
 frame.rowconfigure(0, weight=0)
-wordcount.grid(row=1, column=0, sticky='w', pady=(5, 10))
+input_counter.grid(row=1, column=0, sticky='e', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
-outputbox.grid(row=5, columnspan=3, sticky='ewns')
-frame.rowconfigure(5, weight=1)
-progress_gpt = ttk.Label(frame)
-progress_gpt.grid(row=6, column=0, columnspan=3, sticky='ew', pady=10)
+progress_gpt = ttk.Label(frame, bootstyle='info', text=GPT_READY)
+progress_gpt.grid(row=5, column=0, columnspan=3, sticky='w', pady=10)
+outputbox.grid(row=6, columnspan=3, sticky='ewns')
+frame.rowconfigure(6, weight=1)
+output_counter.grid(row=7, column=0, sticky='e', pady=(5, 10))
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
              + '\nYou can also type text here and press Ctrl+Enter to run GPT.')
+replace_text(txt_output, 'GPT output goes here.')
 
 menu_actions = tk.Menu(root, tearoff=0)
 build_action_menu(menu_actions)

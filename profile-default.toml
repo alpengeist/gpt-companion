@@ -11,7 +11,7 @@ models = ['text-davinci-003', 'code-davinci-002']
 # OPTIONAL in custom profile
 # Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
 # a different HTTP endpoint. The companion does not implement a chat. It is using single requests with no history.
-chat_models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
+chat_models = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo']
 # OPTIONAL in custom profile: Chat models have a 'system' role, which gives a general instruction to the model.
 chat_instruction = "be precise and concise"
 
@@ -20,10 +20,10 @@ chat_instruction = "be precise and concise"
 # MANDATORY in custom model
 [actions]
 "Pass-through"= ""
-"Summarize" =  "sum up the text:\n"
+"Summarize" =  "rewrite summarized:\n"
 "Readability"= "optimize the readability=\n"
 "Fix Grammar"= "fix the grammar of the following text:\n"
-"More idiomatic"= "write the following text in a more idiomatic style:\n"
+"More idiomatic"= "rewrite in a more idiomatic style:\n"
 "Explain Word"= "explain the word "
 "Alternative Words"= "name alternative words for:\n"
 "Opposite"= "name the opposite of:\n"

@@ -2,7 +2,7 @@
 
 ## What it does
 
-![GPT Companion App](doc/app.png)
+<img alt="Companion App" src="doc/app.png" width="75%" height="75%"/>
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
 The GPT Companion tool works in similar ways. You select some text in a source
@@ -16,7 +16,7 @@ An action did not work as expected? A new action comes to mind? Just edit the pr
 With the hotkey it can display a popup menu with the actions at the
 mouse position in any application. This feature is configurable.
 
-<img src="doc/popup.png" width="30%" height="30%"/>
+<img alt="action popup" src="doc/popup.png" width="30%" height="30%"/>
 
 The companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste the text yourself and fiddle with the

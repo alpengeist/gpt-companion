@@ -36,9 +36,7 @@ Python 3.11
 
 ## Platforms
 
-Tested and developed under Windows 11
-
-*I'm doing my best for the macOS version. Without having a Mac myself, this is a bit of a challenge*.
+Developed and tested under Windows 11. Tested under macOS Ventura 13.
 
 ## Installation
 

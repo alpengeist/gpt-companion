@@ -41,8 +41,8 @@ max_tokens = 500
 autocall = 1
 # enable/disable in-place action popup after hot key has been pressed
 action_popup = 1
-
-# The pynput module may have trouble with <ctrl> and <alt> on MacOS. Use <cmd> and <shift> instead.
+# The pynput module may have trouble with <ctrl> and <alt> on MacOS. Use <cmd> and <shift> instead if
+# you experience any difficulties. <alt> on the Mac is equivalent to the "Option" key.
 # hotkey = '<cmd>+<shift>+g'
 hotkey = '<ctrl>+<alt>+g'
 # Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.

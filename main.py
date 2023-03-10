@@ -13,6 +13,7 @@ GPT_READY = 'READY'
 GPT_RUNNING = 'RUNNING'
 mouse_pos = ()
 
+
 def change_profile(e):
     menu_actions.delete(0, len(config.action_choices()) + 1)
     config.select(cbb_profiles.get())
@@ -103,15 +104,14 @@ def paste_and_complete():
     # keyboard.send('ctrl+c')
     c = pynput.keyboard.Controller()
     if sys.platform == 'darwin':
-        with c.pressed(pynput.keyboard.Key.cmd):
+        # something seems to be fishy with Key.cmd as argument
+        with c.pressed(pynput.keyboard.Key.cmd.value):
             c.press('c')
             c.release('c')
-            c.release(pynput.keyboard.Key.cmd)
     else:
         with c.pressed(pynput.keyboard.Key.ctrl):
             c.press('c')
             c.release('c')
-            c.release(pynput.keyboard.Key.ctrl)
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():

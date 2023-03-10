@@ -43,9 +43,9 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 `pip install -r requirements.txt`
 
 ### macOS
-To allow the Companion read the keyboard and mouse on macOS, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html). 
+To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html). 
 
-**Without that, the automated copy&paste from the app to the Companion will not work.**
+**Without that, the automated copy&paste from a source application to the Companion will not work.**
 
 The python executable must be white-listed in the security settings under _Enable access for assistive devices_.
 If you feel uncomfortable with white-listing the whole Python installation,

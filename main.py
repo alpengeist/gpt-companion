@@ -143,7 +143,8 @@ def hide_action_menu():
 
 def mouse_moved(x, y):
     global mouse_pos
-    mouse_pos = (x, y)
+    # strangely enough, macOS sends mouse positions as float
+    mouse_pos = (int(x), int(y))
 
 
 def hotkey_pressed():

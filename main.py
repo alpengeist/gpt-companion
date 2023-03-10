@@ -8,6 +8,10 @@ import pynput
 import config
 import gpt
 
+BTN_WIDTH = 10
+GPT_READY = 'READY'
+GPT_RUNNING = 'RUNNING'
+mouse_pos = ()
 
 def change_profile(e):
     menu_actions.delete(0, len(config.action_choices()) + 1)
@@ -194,11 +198,6 @@ def create_wordcount_label(parent, text):
     lbl_wordcount_value.grid(row=0, column=1, sticky="w")
     return wordcount, v_wordcount
 
-
-BTN_WIDTH = 10
-GPT_READY = 'GPT is ready.'
-GPT_RUNNING = 'GPT is working...'
-mouse_pos = ()
 
 root = ttk.Window(themename='darkly')
 if config.startup()['on_top']:

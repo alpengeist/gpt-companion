@@ -45,12 +45,8 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 ### macOS
 To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html). 
 
-**Without that, the automated copy&paste from a source application to the Companion will not work.**
-
-The python executable must be white-listed in the security settings under _Enable access for assistive devices_.
-If you feel uncomfortable with white-listing the whole Python installation,
-I suggest you create and white-list a virtual Python environment, which has its own copy of Python 
-and install the Companion there.
+**Without that, the automated copy&paste from a source application to the Companion will not work, 
+because the Companion is not allowed to send the CMD-C keystrokes to the application.**
 
 ## Configuration
 

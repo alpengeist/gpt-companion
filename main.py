@@ -109,7 +109,7 @@ def paste_and_complete():
             c.press('c')
             c.release('c')
     else:
-        with c.pressed(pynput.keyboard.Key.ctrl):
+        with c.pressed(pynput.keyboard.Key.ctrl.value):
             c.press('c')
             c.release('c')
     time.sleep(config.hotkey_wait())

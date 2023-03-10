@@ -153,6 +153,8 @@ def bind_keyboard_and_mouse():
     # if sys.platform != 'darwin':
     mlistener = pynput.mouse.Listener(on_move=mouse_moved)
     mlistener.start()
+    # due to a race condition in a non-threadsafe macOS implementation a short delay is required
+    time.sleep(1)
 
     # keyboard.add_hotkey(config.hotkey(), pop_action_menu)
 

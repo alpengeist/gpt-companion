@@ -45,8 +45,8 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 ### macOS
 To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html). 
 
-**Without that, the automated copy&paste from a source application to the Companion will not work, 
-because the Companion is not allowed to send the CMD-C keystrokes to the application.**
+**I was not able to make the cmd-c hotkey to work on macOS. Neither pyinput nor pyautogui did the job, despite all
+security settings in place. For the time being, you need to press cmd-c yourself before the Companion hotkey**
 
 ## Configuration
 

@@ -7,7 +7,7 @@ import pynput
 # import keyboard
 import config
 import gpt
-import pyautogui
+# import pyautogui
 
 BTN_WIDTH = 10
 GPT_READY = 'READY'
@@ -106,15 +106,15 @@ def paste_and_complete():
     c = pynput.keyboard.Controller()
     if sys.platform == 'darwin':
         # something seems to be fishy with Key.cmd as argument
-#        with c.pressed(pynput.keyboard.Key.cmd.value):
-#            c.press('c')
-#            c.release('c')
-        pyautogui.hotkey('command', 'c', interval=0.3)
+        with c.pressed(pynput.keyboard.Key.cmd.value):
+            c.press('c')
+            c.release('c')
+        #pyautogui.hotkey('command', 'c', interval=0.3)
     else:
-#        with c.pressed(pynput.keyboard.Key.ctrl):
-#            c.press('c')
-            #c.release('c')
-        pyautogui.hotkey('ctrl', 'c')
+        with c.pressed(pynput.keyboard.Key.ctrl):
+            c.press('c')
+            c.release('c')
+        #pyautogui.hotkey('ctrl', 'c')
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():

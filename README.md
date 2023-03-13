@@ -43,10 +43,11 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 `pip install -r requirements.txt`
 
 ### macOS
-To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html). 
+To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html).
 
-**I was not able to make the cmd-c hotkey to work on macOS. Neither pyinput nor pyautogui did the job, despite all
-security settings in place. For the time being, you need to press cmd-c yourself before the Companion hotkey**
+**It seems that you have to whitelist both, the Terminal app AND the packaged app under 
+"Enable access for assistive devices" unless you are comfortable running the companion
+as root (I wouldn't do that) or grant the whitelist to the whole Python installation (not a good idea either)**
 
 ## Configuration
 

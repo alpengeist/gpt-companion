@@ -4,10 +4,8 @@ import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
-# import keyboard
 import config
 import gpt
-# import pyautogui
 
 BTN_WIDTH = 10
 GPT_READY = 'READY'
@@ -102,19 +100,16 @@ def paste_and_complete():
     # Give app time to settle from hotkey
     time.sleep(config.hotkey_wait())
     # Force source app to copy to clipboard and wait a little
-    # keyboard.send('ctrl+c')
     c = pynput.keyboard.Controller()
     if sys.platform == 'darwin':
         # something seems to be fishy with Key.cmd as argument
         with c.pressed(pynput.keyboard.Key.cmd.value):
             c.press('c')
             c.release('c')
-        #pyautogui.hotkey('command', 'c', interval=0.3)
     else:
         with c.pressed(pynput.keyboard.Key.ctrl):
             c.press('c')
             c.release('c')
-        #pyautogui.hotkey('ctrl', 'c')
     time.sleep(config.hotkey_wait())
     paste_clipboard()
     if v_autocall.get():
@@ -136,7 +131,6 @@ def build_action_menu(m):
 
 def pop_action_menu():
     menu_actions.post(mouse_pos[0], mouse_pos[1])
-    # menu_actions.focus_set()
 
 
 def hide_action_menu():
@@ -158,20 +152,15 @@ def hotkey_pressed():
 
 
 def bind_keyboard_and_mouse():
-    # if sys.platform != 'darwin':
     mlistener = pynput.mouse.Listener(on_move=mouse_moved)
     mlistener.start()
     # due to a race condition in a non-threadsafe macOS implementation a short delay is required
     time.sleep(1)
 
-    # keyboard.add_hotkey(config.hotkey(), pop_action_menu)
-
     def release(k):
-        # print(f'release {k}')
         hotkey.release(klistener.canonical(k))
 
     def press(k):
-        # print(f'press {k}')
         hotkey.press(klistener.canonical(k))
 
     # Popups don't go well with pynput HotKey because they snatch all the key releases.

@@ -109,7 +109,7 @@ def paste_and_complete():
 #        with c.pressed(pynput.keyboard.Key.cmd.value):
 #            c.press('c')
 #            c.release('c')
-        pyautogui.hotkey('cmd', 'c')
+        pyautogui.hotkey('command', 'c')
     else:
 #        with c.pressed(pynput.keyboard.Key.ctrl):
 #            c.press('c')

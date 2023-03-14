@@ -13,7 +13,7 @@ GPT_RUNNING = 'RUNNING'
 mouse_pos = ()
 
 
-def change_profile(e):
+def change_profile(unused):
     menu_actions.delete(0, len(config.action_choices()) + 1)
     config.select(cbb_profiles.get())
     build_action_menu(menu_actions)
@@ -21,6 +21,10 @@ def change_profile(e):
     cbb_models.set(config.all_models()[0])
     cbb_actions.configure(values=config.action_choices())
     v_action.set(config.action_first())
+    v_temperature.set(config.temperature())
+    v_autocall.set(config.autocall())
+    v_use_popup.set(config.action_popup())
+    v_max_tokens.set(config.max_tokens())
 
 
 def replace_text(widget, text):
@@ -144,8 +148,8 @@ def mouse_moved(x, y):
     mouse_pos = (int(x), int(y))
 
 
-def hotkey_pressed():
-    if config.action_popup():
+def action():
+    if v_use_popup.get():
         pop_action_menu()
     else:
         paste_and_complete()
@@ -165,13 +169,13 @@ def bind_keyboard_and_mouse():
 
     # Popups don't go well with pynput HotKey because they snatch all the key releases.
     # This messes up the internal state management of the HotKey instance. We help him by releasing the keys.
-    def activate():
-        for k in pk:
+    def action_menu():
+        for k in hotkey_parsed:
             release(k)
-        pop_action_menu()
+        action()
 
-    pk = pynput.keyboard.HotKey.parse(config.hotkey())
-    hotkey = pynput.keyboard.HotKey(pk, activate)
+    hotkey_parsed = pynput.keyboard.HotKey.parse(config.hotkey())
+    hotkey = pynput.keyboard.HotKey(hotkey_parsed, action_menu)
     klistener = pynput.keyboard.Listener(on_press=press, on_release=release)
     klistener.start()
 
@@ -193,7 +197,7 @@ def create_wordcount_label(parent, text):
 
 
 root = ttk.Window(themename='darkly')
-if config.startup()['on_top']:
+if config.on_top():
     root.attributes('-topmost', 1)
 root.title('GPT Companion')
 root.columnconfigure(0, weight=1)
@@ -250,16 +254,25 @@ v_action = tk.StringVar()
 cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
+# actionbox layout
+lbl_action.grid(row=0, column=0, sticky='w')
+cbb_actions.grid(row=0, column=1, sticky='e', padx=5, pady=5)
+btn_paste.grid(row=0, column=2)
+btn_gpt.grid(row=0, column=3, padx=5, pady=5)
+
+# option box
+optionbox = ttk.Frame(frame)
 # hotkey autocall option
 v_autocall = tk.IntVar()
 v_autocall.set(config.autocall())
-btn_autocall = ttk.Checkbutton(actionbox, variable=v_autocall, text='Auto call with hotkey ' + config.hotkey())
-# actionbox layout
-lbl_action.grid(row=0, column=0)
-cbb_actions.grid(row=0, column=1, sticky='ns', padx=5, pady=5)
-btn_paste.grid(row=0, column=2)
-btn_gpt.grid(row=0, column=3, padx=5, pady=5)
-btn_autocall.grid(row=0, column=4, padx=5)
+btn_autocall = ttk.Checkbutton(optionbox, variable=v_autocall, text='Auto call')
+# popup menu option
+v_use_popup = tk.IntVar()
+v_use_popup.set(config.action_popup())
+btn_use_popup = ttk.Checkbutton(optionbox, variable=v_use_popup, text='Action popup')
+#option box layout
+btn_use_popup.grid(row=0, column=0)
+btn_autocall.grid(row=0, column=1, padx=15)
 
 # Model parameters box
 modelbox = ttk.Frame(frame)
@@ -297,11 +310,12 @@ input_counter.grid(row=1, column=0, sticky='e', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
+optionbox.grid(row=5, column=0, sticky='w')
 progress_gpt = ttk.Label(frame, bootstyle='info', text=GPT_READY)
-progress_gpt.grid(row=5, column=0, columnspan=3, sticky='w', pady=10)
-outputbox.grid(row=6, columnspan=3, sticky='ewns')
-frame.rowconfigure(6, weight=1)
-output_counter.grid(row=7, column=0, sticky='e', pady=(5, 10))
+progress_gpt.grid(row=6, column=0, columnspan=3, sticky='w', pady=20)
+outputbox.grid(row=7, columnspan=3, sticky='ewns')
+frame.rowconfigure(8, weight=1)
+output_counter.grid(row=8, column=0, sticky='e', pady=(5, 10))
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
              + '\nYou can also type text here and press Ctrl+Enter to run GPT.')

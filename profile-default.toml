@@ -1,23 +1,24 @@
 # GPT Companion default profile
 # Do not change property names in this file. Do not delete any property.
-# To reduce redundancy, custom profiles overwrite the defaults.
-#
+# Create as many custom profiles as you like and pick the specific properties to overwrite.
+# All props are OPTIONAL unless marked as MANDATORY
 [settings]
-# MANDATORY in custom profile
+# MANDATORY, name to display in model selection
 name  = "Default"
-# OPTIONAL in custom profile
 # Model names taken from https://platform.openai.com/playground
 models = ['text-davinci-003', 'code-davinci-002']
-# OPTIONAL in custom profile
 # Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
 # a different HTTP endpoint. The companion does not implement a chat. It is using single requests with no history.
 chat_models = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo']
-# OPTIONAL in custom profile: Chat models have a 'system' role, which gives a general instruction to the model.
+# Chat models have a 'system' role, which gives a general instruction to the model.
 chat_instruction = "be precise and concise"
+# GPT temperature
+temperature = 0.7
+# default value for max number of tokens in response
+max_tokens = 500
 
-# key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
+# MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text. The first entry is the default.
-# MANDATORY in custom model
 [actions]
 "Pass-through"= ""
 "Summarize" =  "rewrite summarized:\n"
@@ -29,23 +30,18 @@ chat_instruction = "be precise and concise"
 "Opposite"= "name the opposite of:\n"
 "Typical Sentence"= "write a typical sentence with:\n"
 
-# The following props are only used during startup and cannot be overwritten by custom profiles
+# Startup props are used during startup and cannot be overwritten by custom profiles
 [startup]
 # let the companion be always on top; very useful for working inside large texts
 on_top = 0
-# GPT temperature
-temperature = 0.7
-# default value for max number of tokens in response
-max_tokens = 500
-# start value of the corresponding checkbox in the UI. 1 = call GPT immediately after pasting the text
-autocall = 1
-# enable/disable in-place action popup after hot key has been pressed
-action_popup = 1
 # The pynput module may have trouble with <ctrl> and <alt> on MacOS. Use <cmd> and <shift> instead if
 # you experience any difficulties. <alt> on the Mac is equivalent to the "Option" key.
-# hotkey = '<cmd>+<shift>+g'
 hotkey = '<ctrl>+<alt>+g'
 # Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
-# After the waiting time the companion sends COPY_KEY keypress to the app.
-# If you notice that selected text is not copied, try increasing the time or use another hotkey.
-hotkey_wait = 1  # seconds
+# After the waiting time the companion sends ctr+c (macOS cmd+c) to the app.
+# If you notice that selected text is not copied or a "c" overwrites the text, try increasing the time.
+hotkey_wait = 1.5  # seconds
+# 1 = call GPT immediately after pasting the text, 0 = off
+autocall = 1
+# 1 = display in-place action popup after hot key has been pressed, 0 = off
+action_popup = 1

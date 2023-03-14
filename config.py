@@ -24,16 +24,23 @@ def profile_choices():
     return [k for k in profiles.keys()]
 
 
+def get_with_fallback(section, prop):
+    if section in selected():
+        return selected()[section].get(prop, default_profile()[section][prop])
+    else:
+        return default_profile()[section][prop]
+
+
 def name():
     return selected()['settings']['name']
 
 
 def models():
-    return selected()['settings'].get('models', default_profile()['settings']['models'])
+    return get_with_fallback('settings', 'models')
 
 
 def chat_models():
-    return selected()['settings'].get('chat_models', default_profile()['settings']['chat_models'])
+    return get_with_fallback('settings', 'chat_models')
 
 
 def all_models():
@@ -41,7 +48,15 @@ def all_models():
 
 
 def chat_instruction():
-    return selected()['settings'].get('chat_instruction', default_profile()['settings']['chat_instruction'])
+    return get_with_fallback('settings', 'chat_instruction')
+
+
+def temperature():
+    return get_with_fallback('settings', 'temperature')
+
+
+def max_tokens():
+    return get_with_fallback('settings', 'max_tokens')
 
 
 def action_choices():
@@ -64,32 +79,24 @@ def startup():
     return default_profile()['startup']
 
 
-def hotkey():
-    return startup()['hotkey']
-
-
-def hotkey_wait():
-    return startup()['hotkey_wait']
-
-
-def copy_key():
-    return startup()['copy_key']
-
-
-def temperature():
-    return startup()['temperature']
+def action_popup():
+    return startup()['action_popup']
 
 
 def autocall():
     return startup()['autocall']
 
 
-def max_tokens():
-    return startup()['max_tokens']
+def on_top():
+    return startup()['on_top']
 
 
-def action_popup():
-    return startup()['action_popup']
+def hotkey():
+    return startup()['hotkey']
+
+
+def hotkey_wait():
+    return startup()['hotkey_wait']
 
 
 def validate_profile(p):

@@ -118,9 +118,9 @@ def paste_and_complete():
 
 def build_action_menu(m):
     def menu_action_command(cmd):
+        hide_action_menu()
         cbb_actions.set(cmd)
         paste_and_complete()
-        hide_action_menu()
 
     m.add_command(label="-Close-")  # dummy command to be able to close menu without effect
     m.add_separator()

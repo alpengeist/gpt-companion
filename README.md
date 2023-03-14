@@ -12,11 +12,13 @@ For example, you could have a profile for English, one for German, one for fun s
 An action did not work as expected? A new action comes to mind? Just edit the profile, press the _Reload_ button and run GPT again.
 
 With the hotkey it can display a popup menu with the actions at the
-mouse position in any application. This feature is configurable.
+mouse position in any application. The next image depicts a text selection in Wikipedia and
+the menu upon pressing the hotkey. Once an action is selected, the Companion makes the browser copy the selection
+into the clipboard, and then it fetches the clipboard content.
 
 <img alt="action popup" src="doc/popup.png" width="30%" height="30%"/>
 
-The app can also stay on top of all windows, which is also configurable.
+The app can be configured to stay on top of all windows.
 
 For working on text documents, the Companion is more convenient than using ChatGPT or OpenAI Playground
 where you'll have to copy&paste text snippets yourself and fiddle with the

@@ -148,13 +148,6 @@ def mouse_moved(x, y):
     mouse_pos = (int(x), int(y))
 
 
-def action():
-    if v_use_popup.get():
-        pop_action_menu()
-    else:
-        paste_and_complete()
-
-
 def bind_keyboard_and_mouse():
     mlistener = pynput.mouse.Listener(on_move=mouse_moved)
     mlistener.start()
@@ -172,7 +165,10 @@ def bind_keyboard_and_mouse():
     def action_menu():
         for k in hotkey_parsed:
             release(k)
-        action()
+        if v_use_popup.get():
+            pop_action_menu()
+        else:
+            paste_and_complete()
 
     hotkey_parsed = pynput.keyboard.HotKey.parse(config.hotkey())
     hotkey = pynput.keyboard.HotKey(hotkey_parsed, action_menu)

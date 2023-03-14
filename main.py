@@ -202,6 +202,8 @@ if config.on_top():
 root.title('GPT Companion')
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
+tk.font.nametofont('TkTextFont').configure(size=config.font_size())     # combo boxes
+tk.font.nametofont('TkDefaultFont').configure(size=config.font_size())  # everything else
 
 # Master frame
 frame = ttk.Frame(root, padding=10, borderwidth=2, width=800, height=500)

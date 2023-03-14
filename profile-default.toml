@@ -45,3 +45,5 @@ hotkey_wait = 1.5  # seconds
 autocall = 1
 # 1 = display in-place action popup after hot key has been pressed, 0 = off
 action_popup = 1
+# font size for all the things
+font_size = 12

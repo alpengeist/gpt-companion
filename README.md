@@ -11,9 +11,9 @@ Put your preferred GPT text processing actions (prompts) into profiles, which yo
 For example, you could have a profile for English, one for German, one for fun stuff, etc.
 An action did not work as expected? A new action comes to mind? Just edit the profile, press the _Reload_ button and run GPT again.
 
-Once the hotkey is pressed and *action popup* is switched on, it displays a menu at the
-mouse position in any application. The next image depicts a text selection in Wikipedia and
-the menu upon pressing the hotkey. Once an action is selected, the Companion makes the browser copy the selection
+Once the hotkey is pressed and *Action popup* is switched on, it displays a menu at the
+current mouse position. The next image depicts a text selection in Wikipedia and
+the menu after pressing the hotkey. Once an action is selected, the Companion makes the browser copy the selection
 into the clipboard, and then it fetches the clipboard content. If *Auto call* is switched on, it calls GPT immediately.
 
 <img alt="action popup" src="doc/popup.png" width="30%" height="30%"/>

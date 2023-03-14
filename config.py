@@ -99,6 +99,10 @@ def hotkey_wait():
     return startup()['hotkey_wait']
 
 
+def font_size():
+    return startup()['font_size']
+
+
 def validate_profile(p):
     if 'settings' not in p or 'name' not in p['settings']:
         raise ValueError('missing mandatory property settings.name')

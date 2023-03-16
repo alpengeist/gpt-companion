@@ -252,14 +252,9 @@ v_action = tk.StringVar()
 cbb_actions = ttk.Combobox(actionbox, values=config.action_choices(), textvariable=v_action)
 cbb_actions.state(['readonly'])
 cbb_actions.set(config.action_first())
-# actionbox layout
-lbl_action.grid(row=0, column=0, sticky='w')
-cbb_actions.grid(row=0, column=1, sticky='e', padx=5, pady=5)
-btn_paste.grid(row=0, column=2)
-btn_gpt.grid(row=0, column=3, padx=5, pady=5)
 
 # option box
-optionbox = ttk.Frame(frame)
+optionbox = ttk.Frame(actionbox)
 # hotkey autocall option
 v_autocall = tk.IntVar()
 v_autocall.set(config.autocall())
@@ -271,6 +266,13 @@ btn_use_popup = ttk.Checkbutton(optionbox, variable=v_use_popup, text='Action po
 #option box layout
 btn_use_popup.grid(row=0, column=0)
 btn_autocall.grid(row=0, column=1, padx=15)
+
+# actionbox layout
+lbl_action.grid(row=0, column=0, sticky='w')
+cbb_actions.grid(row=0, column=1, sticky='e', padx=5, pady=5)
+btn_paste.grid(row=0, column=2)
+btn_gpt.grid(row=0, column=3, padx=5, pady=5)
+optionbox.grid(row=0, column=4, padx=10)
 
 # Model parameters box
 modelbox = ttk.Frame(frame)
@@ -308,7 +310,7 @@ input_counter.grid(row=1, column=0, sticky='e', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
-optionbox.grid(row=5, column=0, sticky='w')
+#optionbox.grid(row=4, column=0, sticky='w')
 progress_gpt = ttk.Label(frame, bootstyle='info', text=GPT_READY)
 progress_gpt.grid(row=6, column=0, columnspan=3, sticky='w', pady=20)
 outputbox.grid(row=7, columnspan=3, sticky='ewns')

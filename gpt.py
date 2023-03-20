@@ -30,14 +30,15 @@ def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', 
     ]
     print(f"model={model}, temperature={temperature}\n{messages}")
     try:
-        ev = openai.ChatCompletion.create(
+        for ev in openai.ChatCompletion.create(
             model=model,
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
-            stream=False     # streaming is broken as of v0.27
-        )
-        return [ev['choices'][0]['message']['content']]
+            stream=True
+        ):
+            if 'content' in ev['choices'][0]['delta']:
+                yield ev['choices'][0]['delta']['content']
     except openai.error.OpenAIError as e:
         raise RuntimeError(f"{e=}")
 

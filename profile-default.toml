@@ -29,6 +29,7 @@ max_tokens = 500
 "Alternative Words"= "name alternative words for:\n"
 "Opposite"= "name the opposite of:\n"
 "Typical Sentence"= "write a typical sentence with:\n"
+"Facts" = "A list of the main facts of the following text is:\n1)"
 
 # Startup props are used during startup and cannot be overwritten by custom profiles
 [startup]

@@ -45,11 +45,13 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 `pip install -r requirements.txt`
 
 ### macOS
-To allow the Companion send keyboard events to an application, please see the section _macOS_ under [Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html).
 
-**It seems that you have to whitelist both, the Terminal app AND the packaged app under 
-"Enable access for assistive devices" unless you are comfortable running the companion
-as root (I wouldn't do that) or grant the whitelist to the whole Python installation (not a good idea either)**
+1. Install py2pp with `pip install py2app`
+2. Create macOS app bundle with `python setup.py py2app -A` [^1]
+3. Start the macOS bundle in dist folder
+4. Enable "Input Monitoring" in System > Privacy & Security > Input Monitoring for GPT Companion ([Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html))
+
+[^1]: Alias mode (the -A or --alias option) instructs py2app to build an application bundle that uses your source and data files in-place. It does not create standalone applications, and the applications built in alias mode are not portable to other machines.
 
 ## Configuration
 

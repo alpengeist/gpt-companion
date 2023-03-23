@@ -14,12 +14,13 @@ mouse_pos = ()
 
 
 def change_profile(unused):
-    menu_actions.delete(0, len(config.action_choices()) + 1)
+    cbb_profiles['values'] = config.profile_choices()
+    menu_actions.delete(0, tk.END)
     config.select(cbb_profiles.get())
     build_action_menu(menu_actions)
-    cbb_models.configure(values=config.all_models())
-    cbb_models.set(config.all_models()[0])
-    cbb_actions.configure(values=config.action_choices())
+    cbb_models['values'] = config.all_models()
+    cbb_models.set(cbb_models['values'][0])
+    cbb_actions['values'] = config.action_choices()
     v_action.set(config.action_first())
     v_temperature.set(config.temperature())
     v_autocall.set(config.autocall())
@@ -82,10 +83,9 @@ def gpt_completion():
     prefix = config.action_text(cbb_actions.get())
     replace_text(txt_output, '')
     update_input_counter()
+    progress_gpt['text'] = GPT_RUNNING
     frame.update()
     try:
-        progress_gpt['text'] = GPT_RUNNING
-        frame.update()
         model = cbb_models.get()
         if model in config.chat_models():
             res = gpt.chat_completion(
@@ -191,8 +191,7 @@ def reload_profiles():
 def create_wordcount_label(parent, text):
     wordcount = ttk.Frame(parent)
     lbl_wordcount = ttk.Label(wordcount, text=text, bootstyle='light')
-    v_wordcount = tk.StringVar()
-    v_wordcount.set("0")
+    v_wordcount = tk.StringVar(value='0')
     lbl_wordcount_value = ttk.Label(wordcount, textvariable=v_wordcount, bootstyle='light')
     lbl_wordcount.grid(row=0, column=0, sticky="w")
     lbl_wordcount_value.grid(row=0, column=1, sticky="w")
@@ -263,15 +262,12 @@ cbb_actions.set(config.action_first())
 # option box
 optionbox = ttk.Frame(actionbox)
 # hotkey autocall option
-v_autocall = tk.IntVar()
-v_autocall.set(config.autocall())
+v_autocall = tk.IntVar(value=config.autocall())
 btn_autocall = ttk.Checkbutton(optionbox, variable=v_autocall, text='Auto call')
 # popup menu option
-v_use_popup = tk.IntVar()
-v_use_popup.set(config.action_popup())
+v_use_popup = tk.IntVar(value=config.action_popup())
 btn_use_popup = ttk.Checkbutton(optionbox, variable=v_use_popup, text='Action popup')
-v_write_back = tk.IntVar()
-v_write_back.set(False)
+v_write_back = tk.IntVar(value=False)
 btn_write_back = ttk.Checkbutton(optionbox, variable=v_write_back, text='Write back')
 #option box layout
 btn_use_popup.grid(row=0, column=0)
@@ -293,14 +289,12 @@ cbb_models = ttk.Combobox(modelbox, values=config.all_models())
 cbb_models.state(['readonly'])
 cbb_models.set(config.all_models()[0])
 # temperature display
-v_temperature = tk.StringVar()
-v_temperature.set(str(config.temperature()))
+v_temperature = tk.StringVar(value=str(config.temperature()))
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
 scl_temperature = ttk.Scale(modelbox, from_=0, to=1, variable=v_temperature, command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 # max_tokens display
-v_max_tokens = tk.StringVar()
-v_max_tokens.set(str(config.max_tokens()))
+v_max_tokens = tk.StringVar(value=config.max_tokens())
 lbl_max_tokens = ttk.Label(modelbox, text='Max output tokens:')
 scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, variable=v_max_tokens, command=set_max_tokens, length=250)
 lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)

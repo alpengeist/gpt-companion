@@ -104,9 +104,11 @@ def font_size():
 
 
 def validate_profile(p):
-    if 'settings' not in p or 'name' not in p['settings']:
+    if not p.get('settings', {}).get('name'):
         raise ValueError('missing mandatory property settings.name')
-    if 'actions' not in p or len(p['actions']) == 0:
+    if p['settings']['name'] in profiles:
+        raise ValueError('duplicate profile name')
+    if not p.get('actions'):
         raise ValueError('missing or empty mandatory property settings.actions')
 
 

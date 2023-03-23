@@ -114,9 +114,7 @@ def gpt_completion():
 
 def write_back():
     if v_autocall.get():
-        if remote.write_text(root, get_output()):
-            set_message('Output written back to source application')
-        else:
+        if not remote.write_text(root, get_output()):
             set_message('The application with keyboard focus is not editable, better switch off "Write back"')
 
 

@@ -6,10 +6,10 @@
 # MANDATORY, name to display in model selection
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
-models = ['text-davinci-003', 'code-davinci-002']
+models = ['text-davinci-003', 'code-davinci-002', 'text-ada-001']
 # Unfortunately, the naming of the ChatGPT models give no hint about what they are. However, they require
 # a different HTTP endpoint. The companion does not implement a chat. It is using single requests with no history.
-chat_models = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo']
+chat_models = [ 'gpt-3.5-turbo', 'gpt-3.5-turbo-0301']
 # Chat models have a 'system' role, which gives a general instruction to the model.
 chat_instruction = "be precise and concise"
 # GPT temperature

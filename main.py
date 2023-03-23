@@ -1,10 +1,10 @@
 import os
-import sys
 import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
 import config
+import remotectrl as remote
 import gpt
 
 BTN_WIDTH = 10
@@ -36,6 +36,10 @@ def replace_text(widget, text):
         set_wordcount(v_output_counter, text)
 
 
+def get_output():
+    return txt_output.get('1.0', tk.END)
+
+
 def set_wordcount(v, text):
     v.set(str(len(text.split())))
 
@@ -46,6 +50,10 @@ def update_output_counter():
 
 def update_input_counter():
     set_wordcount(v_input_counter, txt_input.get('1.0', tk.END))
+
+
+def set_message(text):
+    sysmessage['text'] = text
 
 
 def set_temperature(v):
@@ -62,14 +70,14 @@ def set_max_tokens(v):
 
 def paste_clipboard():
     try:
-        text = root.clipboard_get()
-        replace_text(txt_input, text)
+        replace_text(txt_input, remote.get_clipboard(root))
     except tk.TclError:
         replace_text(txt_output, 'Sorry, clipboard "copy" operation failed in source application.'
                                  ' Maybe it is too slow to react or uses the hotkey for something else.')
 
 
 def gpt_completion():
+    set_message('')
     text = txt_input.get('1.0', tk.END)
     prefix = config.action_text(cbb_actions.get())
     replace_text(txt_output, '')
@@ -89,10 +97,14 @@ def gpt_completion():
                 prefix=prefix, text=text, temperature=float(v_temperature.get()),
                 model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
         txt_output.delete('1.0', tk.END)
+        # collect the response from GPT live into the output box
         for t in res:
             txt_output.insert(tk.END, t)
             txt_output.see(tk.END)
             txt_output.update()
+        # if switched on, write the output content to where the current keyboard focus is
+        if v_write_back.get():
+            write_back()
     except RuntimeError as e:
         replace_text(txt_output, f'{e=}')
     finally:
@@ -100,21 +112,16 @@ def gpt_completion():
         update_output_counter()
 
 
+def write_back():
+    if v_autocall.get():
+        if remote.write_text(root, get_output()):
+            set_message('Output written back to source application')
+        else:
+            set_message('The application with keyboard focus is not editable, better switch off "Write back"')
+
+
 def paste_and_complete():
-    # Give app time to settle from hotkey
-    time.sleep(config.hotkey_wait())
-    # Force source app to copy to clipboard and wait a little
-    c = pynput.keyboard.Controller()
-    if sys.platform == 'darwin':
-        # something seems to be fishy with Key.cmd as argument
-        with c.pressed(pynput.keyboard.Key.cmd.value):
-            c.press('c')
-            c.release('c')
-    else:
-        with c.pressed(pynput.keyboard.Key.ctrl):
-            c.press('c')
-            c.release('c')
-    time.sleep(config.hotkey_wait())
+    remote.send_copy_key()
     paste_clipboard()
     if v_autocall.get():
         gpt_completion()
@@ -263,9 +270,13 @@ btn_autocall = ttk.Checkbutton(optionbox, variable=v_autocall, text='Auto call')
 v_use_popup = tk.IntVar()
 v_use_popup.set(config.action_popup())
 btn_use_popup = ttk.Checkbutton(optionbox, variable=v_use_popup, text='Action popup')
+v_write_back = tk.IntVar()
+v_write_back.set(False)
+btn_write_back = ttk.Checkbutton(optionbox, variable=v_write_back, text='Write back')
 #option box layout
 btn_use_popup.grid(row=0, column=0)
 btn_autocall.grid(row=0, column=1, padx=15)
+btn_write_back.grid(row=0, column=2)
 
 # actionbox layout
 lbl_action.grid(row=0, column=0, sticky='w')
@@ -310,12 +321,13 @@ input_counter.grid(row=1, column=0, sticky='e', pady=(5, 10))
 profilebox.grid(row=2, column=0, sticky='w', pady=5)
 modelbox.grid(row=3, column=0, sticky='w', pady=5)
 actionbox.grid(row=4, column=0, sticky='w', pady=5)
-#optionbox.grid(row=4, column=0, sticky='w')
 progress_gpt = ttk.Label(frame, bootstyle='info', text=GPT_READY)
 progress_gpt.grid(row=6, column=0, columnspan=3, sticky='w', pady=20)
 outputbox.grid(row=7, columnspan=3, sticky='ewns')
-frame.rowconfigure(8, weight=1)
+frame.rowconfigure(7, weight=1)
 output_counter.grid(row=8, column=0, sticky='e', pady=(5, 10))
+sysmessage = ttk.Label(frame, bootstyle='danger')
+sysmessage.grid(row=8, column=0, sticky='w')
 
 replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
              + '\nYou can also type text here and press Ctrl+Enter to run GPT.')

@@ -14,7 +14,9 @@ An action did not work as expected? A new action comes to mind? Just edit the pr
 Once the hotkey is pressed and *Action popup* is switched on, it displays a menu at the
 current mouse position. The next image depicts a text selection in Wikipedia and
 the menu after pressing the hotkey. Once an action is selected, the Companion makes the browser copy the selection
-into the clipboard, and then it fetches the clipboard content. If *Auto call* is switched on, it calls GPT immediately.
+into the clipboard, and then it fetches the clipboard content. 
+- If *Auto call* is switched on, it calls GPT immediately.
+- If *Write back* is switched on, the output gets typed into the application that has keyboard focus.
 
 <img alt="action popup" src="doc/popup.png" width="30%" height="30%"/>
 
@@ -73,12 +75,15 @@ To define a new profile:
 
 The program must be run in its directory, otherwise the configuration profiles will not be found.
 
-## Potential Features
+## More about the *write back* feature 
+To edit text in-place, switch on *Write back*. After the GPT response is complete, the Companion will first
+try to type, select, and copy the first character. Then it checks whether the clipboard contains excactly this
+character. In that case, the application with keyboard focus is editable.
 
-In some use cases, it may seem useful to paste the GPT output back into the source text.
-However, this is a very dangerous feature, because the focus must not be taken away
-from the text while GPT is running.
-The application lacks the capability to identify the origin of the text or determine 
-if the source application is currently in an editable input mode. That would require deep OS integration. 
+This probing technique is pretty safe. If the source app is read-only, not much can go bad. It is just one key followed
+by shift-left and ctrl-c (cmd-c on Mac). 
 
+Still, you need to be patient while the Companion is running and not move the focus someplace else.
 
+**Things get a little nasty when GPT takes forever to respond. As the API has no means to interrupt the current request,
+you should kill the Companion first, before changing focus to another app.**

@@ -36,7 +36,7 @@ The chat models must be listed separately in a profile config. See __profile-def
 
 ## Prerequisites
 
-Python 3.11
+I've used Python 3.11, 3.10 or lower may work as well. There are no dependencies on 3.11 features as far as I know. 
 
 ## Platforms
 

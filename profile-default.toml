@@ -19,8 +19,9 @@ max_tokens = 500
 
 # MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
 # of the input text. The first entry is the default.
+# You can use the placeholder $text anywhere in the prompt.
 [actions]
-"Pass-through"= ""
+"Pass-through"= "$text"
 "Summarize" =  "rewrite summarized:\n"
 "Readability"= "optimize the readability=\n"
 "Fix Grammar"= "fix the grammar of the following text:\n"

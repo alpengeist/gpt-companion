@@ -80,7 +80,7 @@ def paste_clipboard():
 def gpt_completion():
     set_message('')
     text = txt_input.get('1.0', tk.END)
-    prefix = config.action_text(cbb_actions.get())
+    prompt = config.action_text(cbb_actions.get())
     replace_text(txt_output, '')
     update_input_counter()
     progress_gpt['text'] = GPT_RUNNING
@@ -89,12 +89,12 @@ def gpt_completion():
         model = cbb_models.get()
         if model in config.chat_models():
             res = gpt.chat_completion(
-                prefix=prefix, text=text, temperature=float(v_temperature.get()),
+                prompt=prompt, text=text, temperature=float(v_temperature.get()),
                 model=cbb_models.get(), max_tokens=int(v_max_tokens.get()),
                 instruction=config.chat_instruction())
         else:
             res = gpt.completion(
-                prefix=prefix, text=text, temperature=float(v_temperature.get()),
+                prompt=prompt, text=text, temperature=float(v_temperature.get()),
                 model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
         txt_output.delete('1.0', tk.END)
         # collect the response from GPT live into the output box

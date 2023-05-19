@@ -1,18 +1,27 @@
 import openai
 import os
+from string import Template
 
 
 def get_apikey():
     return os.getenv('OPENAI_KEY')
 
 
-def completion(prefix='', text='', temperature=0.7, model='ext-davinci-003', max_tokens=1000):
-    prompt = prefix + text
-    print(f"model={model}, temperature={temperature}\n{prompt}")
+def format_prompt(prompt, text) -> str:
+    if '$text' in prompt:
+        t = Template(prompt)
+        return t.substitute(text=text)
+    else:
+        return prompt + text
+
+
+def completion(prompt='', text='', temperature=0.7, model='ext-davinci-003', max_tokens=1000):
+    p = format_prompt(prompt, text)
+    print(f"model={model}, temperature={temperature}\n{p}")
     try:
         for ev in openai.Completion.create(
             model=model,
-            prompt=prompt,
+            prompt=p,
             temperature=temperature,
             max_tokens=max_tokens,
             stream=True
@@ -22,11 +31,11 @@ def completion(prefix='', text='', temperature=0.7, model='ext-davinci-003', max
         raise RuntimeError(f"{e=}")
 
 
-def chat_completion(prefix='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000,
+def chat_completion(prompt='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000,
                     instruction='Be precise and concise'):
     messages = [
         {'role': 'system', 'content': instruction },  # general instruction to the chat
-        {'role': 'user', 'content': prefix + text}
+        {'role': 'user', 'content': format_prompt(prompt, text)}
     ]
     print(f"model={model}, temperature={temperature}\n{messages}")
     try:

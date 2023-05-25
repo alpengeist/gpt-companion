@@ -289,7 +289,7 @@ cbb_models.set(config.all_models()[0])
 # temperature display
 v_temperature = tk.StringVar(value=str(config.temperature()))
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
-scl_temperature = ttk.Scale(modelbox, from_=0, to=1, variable=v_temperature, command=set_temperature)
+scl_temperature = ttk.Scale(modelbox, from_=0, to=2, variable=v_temperature, command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 # max_tokens display
 v_max_tokens = tk.StringVar(value=config.max_tokens())

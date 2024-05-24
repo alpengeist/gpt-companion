@@ -39,16 +39,8 @@ def models():
     return get_with_fallback('settings', 'models')
 
 
-def chat_models():
-    return get_with_fallback('settings', 'chat_models')
-
-
-def all_models():
-    return chat_models() + models()
-
-
-def chat_instruction():
-    return get_with_fallback('settings', 'chat_instruction')
+def instruction():
+    return get_with_fallback('settings', 'instruction')
 
 
 def temperature():

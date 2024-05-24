@@ -86,26 +86,21 @@ def gpt_completion():
     progress_gpt['text'] = GPT_RUNNING
     frame.update()
     try:
-        model = cbb_models.get()
-        if model in config.chat_models():
-            res = gpt.chat_completion(
-                prompt=prompt, text=text, temperature=float(v_temperature.get()),
-                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()),
-                instruction=config.chat_instruction())
-        else:
-            res = gpt.completion(
-                prompt=prompt, text=text, temperature=float(v_temperature.get()),
-                model=cbb_models.get(), max_tokens=int(v_max_tokens.get()))
+        chunks = gpt.chat_completion(
+            prompt=prompt, text=text, temperature=float(v_temperature.get()),
+            model=cbb_models.get(), max_tokens=int(v_max_tokens.get()),
+            instruction=config.instruction())
         txt_output.delete('1.0', tk.END)
         # collect the response from GPT live into the output box
-        for t in res:
+        for c in chunks:
+            t = c.choices[0].delta.content or ''
             txt_output.insert(tk.END, t)
             txt_output.see(tk.END)
             txt_output.update()
         # if switched on, write the output content to where the current keyboard focus is
         if v_write_back.get():
             write_back()
-    except RuntimeError as e:
+    except Exception as e:
         replace_text(txt_output, f'{e=}')
     finally:
         progress_gpt['text'] = GPT_READY
@@ -283,16 +278,16 @@ optionbox.grid(row=0, column=4, padx=10)
 modelbox = ttk.Frame(frame)
 # model menu
 lbl_models = ttk.Label(modelbox, text='Model:')
-cbb_models = ttk.Combobox(modelbox, values=config.all_models())
+cbb_models = ttk.Combobox(modelbox, values=config.models())
 cbb_models.state(['readonly'])
-cbb_models.set(config.all_models()[0])
+cbb_models.set(config.models()[0])
 # temperature display
-v_temperature = tk.StringVar(value=str(config.temperature()))
+v_temperature = tk.IntVar(value=int(config.temperature()))
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
 scl_temperature = ttk.Scale(modelbox, from_=0, to=2, variable=v_temperature, command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 # max_tokens display
-v_max_tokens = tk.StringVar(value=config.max_tokens())
+v_max_tokens = tk.IntVar(value=config.max_tokens())
 lbl_max_tokens = ttk.Label(modelbox, text='Max output tokens:')
 scl_max_tokens = ttk.Scale(modelbox, from_=1, to=4000, variable=v_max_tokens, command=set_max_tokens, length=250)
 lbl_max_tokens_value = ttk.Label(modelbox, textvariable=v_max_tokens, width=6)

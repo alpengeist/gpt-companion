@@ -1,5 +1,4 @@
 # GPT Companion
-
 <img alt="Companion App" src="doc/app.png" width="75%" height="75%"/>
 
 Are you familiar with DeepL's desktop tool for on the fly translations?
@@ -26,28 +25,17 @@ For working on text documents, the Companion is more convenient than using ChatG
 where you'll have to copy&paste text snippets yourself and fiddle with the
 same prompts over and over again. Just run the Companion, put it aside and feed it with text.
 
-## OpenAI Chat Models
-
-The Companion can use the chat models, however not in a chat-like fashion -  nobody needs yet another chatbot. 
-The OpenAI API has a specific endpoint for chat models, which works differently than the other models.
-The companion keeps no history of the "dialog" with the model, which would be required to make it "chatty".
-
-The chat models must be listed separately in a profile config. See __profile-default.toml__ about how to do it.
-
+## OpenAI Models
+The Companion can use the chat models, however not in a chat-like fashion -  nobody needs yet another chatbot.
+The companion keeps no history of the conversation with the model, which would be required to make it "chatty". 
+It provides one-shot Q&A dialog similar to a function call.
 ## Prerequisites
-
 I've used Python 3.11, 3.10 or lower may work as well. There are no dependencies on 3.11 features as far as I know. 
-
 ## Platforms
-
 Developed and tested under Windows 11. Tested under macOS Ventura 13.
-
 ## Installation
-
 `pip install -r requirements.txt`
-
 ### macOS
-
 1. Install py2pp with `pip install py2app`
 2. Create macOS app bundle with `python setup.py py2app -A` [^1]
 3. Start the macOS bundle in dist folder

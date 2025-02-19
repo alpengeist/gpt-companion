@@ -18,7 +18,7 @@ def change_profile(unused):
     menu_actions.delete(0, tk.END)
     config.select(cbb_profiles.get())
     build_action_menu(menu_actions)
-    cbb_models['values'] = config.all_models()
+    cbb_models['values'] = config.models()
     cbb_models.set(cbb_models['values'][0])
     cbb_actions['values'] = config.action_choices()
     v_action.set(config.action_first())

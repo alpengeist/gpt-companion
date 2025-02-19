@@ -7,9 +7,9 @@
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
 # ONLY chat models are supported. The legacy completion API is not supported.
-models = [ 'gpt-3.5-turbo', 'gpt-4o', 'gpt-4']
+models = [ 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-11-20']
 # give a general instruction to the model.
-instruction = "be precise and concise"
+instruction = "Your task is to improve the text. Be precise and concise. Do not add anything, just present the modified text."
 # GPT temperature
 temperature = 0.7
 # default value for max number of tokens in response

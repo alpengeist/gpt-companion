@@ -325,7 +325,7 @@ build_action_menu(menu_actions)
 bind_keyboard_and_mouse()
 
 if __name__ == '__main__':
-    if not os.getenv('OPENAI_KEY'):
-        print('Missing environment variable OPENAI_KEY')
+    if not os.getenv('OPENAI_API_KEY'):
+        print('Missing environment variable OPENAI_API_KEY')
         exit(1)
     root.mainloop()

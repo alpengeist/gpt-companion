@@ -6,18 +6,17 @@
 # MANDATORY, name to display in model selection
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
-# ONLY chat models are supported. The legacy completion API is not supported.
 models = [ 'gpt-4.1', 'gpt-4.1-mini', 'o3-mini']
 # give a general instruction to the model.
-instruction = "Your task is to improve the text. Be precise and concise. Do not add anything, just present the modified text."
+instruction = "Your are a precise and helpful assistant. Your answers are concise and precise."
 # GPT temperature
 temperature = 0.7
 # default value for max number of tokens in response
 max_tokens = 500
 
-# MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts, which are put in front
-# of the input text. The first entry is the default.
-# You can use the placeholder $text anywhere in the prompt.
+# MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts,
+# which are put in front of the input text. The first entry is the default.
+# You can use the placeholder $text anywhere in the prompt if the text should be embedded in the prompt.
 [actions]
 "Pass-through"= "$text"
 "Summarize" =  "rewrite summarized:\n"

@@ -84,7 +84,7 @@ def action_completion():
 
 def prompt_completion(user_prompt):
     prompt = f'''Your task is to work on the presented text using the provided instructions.
-    Respond in the language of the instruction.
+    Respond in the language of the instruction unless a different language is asked for.
     <text>
     $text
     </text>
@@ -166,14 +166,13 @@ def display_prompt_entry():
     # Create a small popup window
     popup = tk.Toplevel(root)
     popup.title("Enter Prompt")
-    popup.geometry("400x100")
     popup.resizable(True, True)
 
     # Make it appear near the mouse position
     popup.geometry(f"+{mouse_pos[0]}+{mouse_pos[1]}")
 
     # Create an entry field
-    prompt_entry = tk.Entry(popup, width=250)
+    prompt_entry = tk.Entry(popup, width=80)
     prompt_entry.pack(pady=10, padx=10, fill=tk.X, expand=True)
     prompt_entry.focus_set()  # Set focus to the entry field
 
@@ -191,8 +190,8 @@ def display_prompt_entry():
     popup.bind("<Escape>", on_escape)
 
     # Add a Cancel button
-    cancel_button = tk.Button(popup, text="Cancel", command=popup.destroy)
-    cancel_button.pack(pady=5)
+    # cancel_button = tk.Button(popup, text="Cancel", command=popup.destroy)
+    # cancel_button.pack(pady=5)
 
     # Ensure entry gets focus - do this after all UI elements are created
     prompt_entry.focus_set()

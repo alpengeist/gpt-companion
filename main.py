@@ -3,6 +3,7 @@ import time
 import ttkbootstrap as ttk
 import tkinter as tk
 import pynput
+
 import config
 import remotectrl as remote
 import gpt
@@ -59,14 +60,14 @@ def set_message(text):
 
 def set_temperature(v):
     v = round(float(v), 2)
-    v_temperature.set(f'{v}')
+    v_temperature.set(v)
 
 
 def set_max_tokens(v):
     v = round(float(v) / 25.0) * 25
     if v == 0:
         v = 1
-    v_max_tokens.set(str(v))
+    v_max_tokens.set(int(v))
 
 
 def paste_clipboard():
@@ -77,17 +78,32 @@ def paste_clipboard():
                                  ' Maybe it is too slow to react or uses the hotkey for something else.')
 
 
-def gpt_completion():
+def action_completion():
+    gpt_completion(config.action_text(cbb_actions.get())
+)
+
+def prompt_completion(user_prompt):
+    prompt = f'''Your task is to work on the presented text using the provided instructions.
+    Respond in the language of the instruction.
+    <text>
+    $text
+    </text>
+    <instructions>
+    {user_prompt}
+    </instructions>
+    '''
+    gpt_completion(prompt)
+
+def gpt_completion(prompt):
     set_message('')
     text = txt_input.get('1.0', tk.END)
-    prompt = config.action_text(cbb_actions.get())
     replace_text(txt_output, '')
     update_input_counter()
     progress_gpt['text'] = GPT_RUNNING
     frame.update()
     try:
         chunks = gpt.chat_completion(
-            prompt=prompt, text=text, temperature=float(v_temperature.get()),
+            prompt=prompt, text=text, temperature=v_temperature.get(),
             model=cbb_models.get(), max_tokens=int(v_max_tokens.get()),
             instruction=config.instruction())
         txt_output.delete('1.0', tk.END)
@@ -117,8 +133,12 @@ def paste_and_complete():
     remote.send_copy_key()
     paste_clipboard()
     if v_autocall.get():
-        gpt_completion()
+        action_completion()
 
+def prompt_and_complete(prompt):
+    remote.send_copy_key()
+    paste_clipboard()
+    prompt_completion(prompt)
 
 def build_action_menu(m):
     def menu_action_command(cmd):
@@ -141,6 +161,44 @@ def hide_action_menu():
     menu_actions.unpost()
     menu_actions.grab_release()
 
+def display_prompt_entry():
+    """Display a popup entry field to enter a prompt for GPT completion."""
+    # Create a small popup window
+    popup = tk.Toplevel(root)
+    popup.title("Enter Prompt")
+    popup.geometry("400x100")
+    popup.resizable(True, True)
+
+    # Make it appear near the mouse position
+    popup.geometry(f"+{mouse_pos[0]}+{mouse_pos[1]}")
+
+    # Create an entry field
+    prompt_entry = tk.Entry(popup, width=250)
+    prompt_entry.pack(pady=10, padx=10, fill=tk.X, expand=True)
+    prompt_entry.focus_set()  # Set focus to the entry field
+
+    # Function to handle Enter key press
+    def on_enter(event):
+        prompt_text = prompt_entry.get()
+        popup.destroy()
+        if prompt_text.strip():  # Check if prompt is not empty
+            prompt_and_complete(prompt_text)
+
+    def on_escape(event):
+        popup.destroy()
+
+    prompt_entry.bind("<Return>", on_enter)
+    popup.bind("<Escape>", on_escape)
+
+    # Add a Cancel button
+    cancel_button = tk.Button(popup, text="Cancel", command=popup.destroy)
+    cancel_button.pack(pady=5)
+
+    # Ensure entry gets focus - do this after all UI elements are created
+    prompt_entry.focus_set()
+    # Additional measure to force focus
+    popup.after(100, lambda: prompt_entry.focus_force())
+
 
 def mouse_moved(x, y):
     global mouse_pos
@@ -156,9 +214,11 @@ def bind_keyboard_and_mouse():
 
     def release(k):
         hotkey.release(klistener.canonical(k))
+        hotkey2.release(klistener.canonical(k))
 
     def press(k):
         hotkey.press(klistener.canonical(k))
+        hotkey2.press(klistener.canonical(k))
 
     # Popups don't go well with pynput HotKey because they snatch all the key releases.
     # This messes up the internal state management of the HotKey instance. We help him by releasing the keys.
@@ -170,8 +230,16 @@ def bind_keyboard_and_mouse():
         else:
             paste_and_complete()
 
+    def prompt():
+        # for k in hotkey2_parsed:
+        #     release(k)
+        display_prompt_entry()
+
     hotkey_parsed = pynput.keyboard.HotKey.parse(config.hotkey())
     hotkey = pynput.keyboard.HotKey(hotkey_parsed, action_menu)
+    hotkey2_parsed = pynput.keyboard.HotKey.parse(config.hotkey2())
+    hotkey2 = pynput.keyboard.HotKey(hotkey2_parsed, prompt)
+
     klistener = pynput.keyboard.Listener(on_press=press, on_release=release)
     klistener.start()
 
@@ -216,7 +284,7 @@ scroll_input = ttk.Scrollbar(inputbox, orient=tk.VERTICAL, command=txt_input.yvi
 txt_input.config(yscrollcommand=scroll_input.set)
 txt_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scroll_input.pack(side=tk.RIGHT, fill=tk.Y)
-txt_input.bind('<Control-Return>', lambda e: gpt_completion())
+txt_input.bind('<Control-Return>', lambda e: action_completion())
 
 input_counter, v_input_counter = create_wordcount_label(frame, 'Input word count:')
 
@@ -244,7 +312,7 @@ btn_reload.grid(row=0, column=2)
 # Action box
 actionbox = ttk.Frame(frame)
 btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=BTN_WIDTH)
-btn_gpt = ttk.Button(actionbox, text='Call GPT', command=gpt_completion, width=BTN_WIDTH, bootstyle='success')
+btn_gpt = ttk.Button(actionbox, text='Call GPT', command=action_completion, width=BTN_WIDTH, bootstyle='success')
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
@@ -282,9 +350,9 @@ cbb_models = ttk.Combobox(modelbox, values=config.models())
 cbb_models.state(['readonly'])
 cbb_models.set(config.models()[0])
 # temperature display
-v_temperature = tk.IntVar(value=int(config.temperature()))
+v_temperature = tk.DoubleVar(value=config.temperature())
 lbl_temperature = ttk.Label(modelbox, text='Temperature:')
-scl_temperature = ttk.Scale(modelbox, from_=0, to=2, variable=v_temperature, command=set_temperature)
+scl_temperature = ttk.Scale(modelbox, from_=0, to=1, variable=v_temperature, command=set_temperature)
 lbl_temperature_value = ttk.Label(modelbox, textvariable=v_temperature, width=4)
 # max_tokens display
 v_max_tokens = tk.IntVar(value=config.max_tokens())

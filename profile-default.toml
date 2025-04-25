@@ -7,7 +7,7 @@
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
 # ONLY chat models are supported. The legacy completion API is not supported.
-models = [ 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-11-20']
+models = [ 'gpt-4.1', 'gpt-4.1-mini', 'o3-mini']
 # give a general instruction to the model.
 instruction = "Your task is to improve the text. Be precise and concise. Do not add anything, just present the modified text."
 # GPT temperature
@@ -37,6 +37,7 @@ on_top = 0
 # The pynput module may have trouble with <ctrl> and <alt> on MacOS. Use <cmd> and <shift> instead if
 # you experience any difficulties. <alt> on the Mac is equivalent to the "Option" key.
 hotkey = '<ctrl>+<alt>+g'
+hotkey2 = '<ctrl>+<alt>+f'
 # Apps have to digest the hotkeys first before they can copy selected text. This takes a little time.
 # After the waiting time the companion sends ctr+c (macOS cmd+c) to the app.
 # If you notice that selected text is not copied or a "c" overwrites the text, try increasing the time.

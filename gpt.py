@@ -10,7 +10,7 @@ def format_prompt(prompt, text) -> str:
         return prompt + text
 
 
-def chat_completion(prompt='', text='', temperature=0.7, model='gpt-3.5-turbo', max_tokens=1000,
+def chat_completion(prompt='', text='', temperature=0.7, model='gpt-4.1-mini', max_tokens=1000,
                     instruction='Be precise and concise'):
     messages = [
         {'role': 'system', 'content': instruction },  # general instruction to the chat

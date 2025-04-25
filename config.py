@@ -44,7 +44,7 @@ def instruction():
 
 
 def temperature():
-    return get_with_fallback('settings', 'temperature')
+    return float(get_with_fallback('settings', 'temperature'))
 
 
 def max_tokens():
@@ -86,6 +86,8 @@ def on_top():
 def hotkey():
     return startup()['hotkey']
 
+def hotkey2():
+    return startup()['hotkey2']
 
 def hotkey_wait():
     return startup()['hotkey_wait']

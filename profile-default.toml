@@ -6,12 +6,12 @@
 # MANDATORY, name to display in model selection
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
-models = [ 'gpt-4.1', 'gpt-4.1-mini', 'o3-mini']
+# first one is default
+models = [ 'gpt-4.1-mini', 'gpt-4.1', 'o3-mini']
 # give a general instruction to the model.
-instruction = "Your are a precise and helpful assistant. Your answers are concise and precise."
-# GPT temperature
+instruction = "Your are a helpful assistant. Your answers are concise and precise."
+# between 0 and 1
 temperature = 0.7
-# default value for max number of tokens in response
 max_tokens = 500
 
 # MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts,

@@ -12,9 +12,9 @@ BTN_WIDTH = 10
 GPT_READY = 'READY'
 GPT_RUNNING = 'RUNNING'
 mouse_pos = ()
+prompt_active = False
 
-
-def change_profile(unused):
+def change_profile():
     cbb_profiles['values'] = config.profile_choices()
     menu_actions.delete(0, tk.END)
     config.select(cbb_profiles.get())
@@ -164,8 +164,12 @@ def hide_action_menu():
 def display_prompt_entry():
     """Display a popup entry field to enter a prompt for GPT completion."""
     # Create a small popup window
+    global prompt_active
+    if prompt_active:
+        return
+    prompt_active = True
     popup = tk.Toplevel(root)
-    popup.title("Enter Prompt")
+    popup.title("Prompt for selected Text")
     popup.resizable(True, True)
 
     # Make it appear near the mouse position
@@ -176,18 +180,23 @@ def display_prompt_entry():
     prompt_entry.pack(pady=10, padx=10, fill=tk.X, expand=True)
     prompt_entry.focus_set()  # Set focus to the entry field
 
-    # Function to handle Enter key press
+    def close(event=None):
+        global prompt_active
+        prompt_active = False
+        popup.destroy()
+
     def on_enter(event):
         prompt_text = prompt_entry.get()
-        popup.destroy()
-        if prompt_text.strip():  # Check if prompt is not empty
+        close()
+        # after the popup is closed, the previously active app with the selected text will get focus again.
+        if prompt_text.strip():
             prompt_and_complete(prompt_text)
 
-    def on_escape(event):
-        popup.destroy()
 
     prompt_entry.bind("<Return>", on_enter)
-    popup.bind("<Escape>", on_escape)
+    popup.bind("<Escape>", close)
+    popup.protocol("WM_DELETE_WINDOW", close)
+
 
     # Add a Cancel button
     # cancel_button = tk.Button(popup, text="Cancel", command=popup.destroy)
@@ -245,7 +254,7 @@ def bind_keyboard_and_mouse():
 
 def reload_profiles():
     config.read_all_profiles()
-    change_profile(None)
+    change_profile()
 
 
 def create_wordcount_label(parent, text):
@@ -261,7 +270,7 @@ def create_wordcount_label(parent, text):
 root = ttk.Window(themename='darkly')
 if config.on_top():
     root.attributes('-topmost', 1)
-root.title('GPT Companion')
+root.title('Text Companion')
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 tk.font.nametofont('TkTextFont').configure(size=config.font_size())     # combo boxes
@@ -311,7 +320,7 @@ btn_reload.grid(row=0, column=2)
 # Action box
 actionbox = ttk.Frame(frame)
 btn_paste = ttk.Button(actionbox, text='Paste', command=paste_clipboard, width=BTN_WIDTH)
-btn_gpt = ttk.Button(actionbox, text='Call GPT', command=action_completion, width=BTN_WIDTH, bootstyle='success')
+btn_gpt = ttk.Button(actionbox, text='RUN', command=action_completion, width=BTN_WIDTH, bootstyle='success')
 # action menu
 lbl_action = ttk.Label(actionbox, text='Action:')
 v_action = tk.StringVar()
@@ -383,9 +392,12 @@ output_counter.grid(row=8, column=0, sticky='e', pady=(5, 10))
 sysmessage = ttk.Label(frame, bootstyle='danger')
 sysmessage.grid(row=8, column=0, sticky='w')
 
-replace_text(txt_input, 'Copy text to clipboard and press <Paste> button, or use hotkey ' + config.hotkey()
-             + '\nYou can also type text here and press Ctrl+Enter to run GPT.')
-replace_text(txt_output, 'GPT output goes here.')
+replace_text(txt_input,
+f'''Copy text to clipboard and press <Paste> button, or use hotkey {config.hotkey()} for action popup.
+Use hotkey {config.hotkey2()} for immediate prompting.
+You can also type text here and press Ctrl+Enter to prompt the Companion.
+''')
+replace_text(txt_output, "Companion's output goes here.")
 
 menu_actions = tk.Menu(root, tearoff=0)
 build_action_menu(menu_actions)

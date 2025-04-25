@@ -169,7 +169,7 @@ def display_prompt_entry():
         return
     prompt_active = True
     popup = tk.Toplevel(root)
-    popup.title("Prompt for selected Text")
+    popup.title("Prompt for selected text")
     popup.resizable(True, True)
 
     # Make it appear near the mouse position

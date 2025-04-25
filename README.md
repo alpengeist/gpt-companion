@@ -36,7 +36,7 @@ Type in the prompt and press ENTER. The Companion will fetch the currently selec
 - The hotkeys can be configured in profile-default.toml. Mind you that it is not easy to find free keys that work in the relevant applications.
 
 ## OpenAI Models
-The Companion can use the chat models, however not in a chat-like fashion -  nobody needs yet another chatbot.
+The Companion can only use the non-reasoning models, however not in a chat-like fashion -  nobody needs yet another chatbot.
 The companion keeps no history of the conversation with the model, which would be required to make it "chatty". 
 It provides one-shot Q&A dialog similar to a function call.
 ## Prerequisites

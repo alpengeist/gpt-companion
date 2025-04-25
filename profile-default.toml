@@ -7,7 +7,7 @@
 name  = "Default"
 # Model names taken from https://platform.openai.com/playground
 # first one is default
-models = [ 'gpt-4.1-mini', 'gpt-4.1', 'o3-mini']
+models = [ 'gpt-4.1-mini', 'gpt-4.1']
 # give a general instruction to the model.
 instruction = "Your are a helpful assistant. Your answers are concise and precise."
 # between 0 and 1

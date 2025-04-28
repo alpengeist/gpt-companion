@@ -46,7 +46,7 @@ Developed and tested under Windows 11. Tested under macOS Ventura 13.
 ## Installation
 `pip install -r requirements.txt`
 ### macOS
-1. Install py2pp with `pip install py2app`
+1. Install py2app with `pip install py2app`
 2. Create macOS app bundle with `python setup.py py2app -A` [^1]
 3. Start the macOS bundle in dist folder
 4. Enable "Input Monitoring" in System > Privacy & Security > Input Monitoring for Text Companion ([Platform limitations — pynput 1.7.6 documentation](https://pynput.readthedocs.io/en/latest/limitations.html))

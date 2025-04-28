@@ -14,7 +14,7 @@ GPT_RUNNING = 'RUNNING'
 mouse_pos = ()
 prompt_active = False
 
-def change_profile():
+def change_profile(unused):
     cbb_profiles['values'] = config.profile_choices()
     menu_actions.delete(0, tk.END)
     config.select(cbb_profiles.get())
@@ -171,6 +171,7 @@ def display_prompt_entry():
     popup = tk.Toplevel(root)
     popup.title("Prompt for selected text")
     popup.resizable(True, True)
+    popup.attributes('-topmost', True)
 
     # Make it appear near the mouse position
     popup.geometry(f"+{mouse_pos[0]}+{mouse_pos[1]}")
@@ -254,7 +255,7 @@ def bind_keyboard_and_mouse():
 
 def reload_profiles():
     config.read_all_profiles()
-    change_profile()
+    change_profile(None)
 
 
 def create_wordcount_label(parent, text):

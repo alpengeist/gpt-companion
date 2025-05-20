@@ -12,7 +12,7 @@ models = [ 'gpt-4.1-mini', 'gpt-4.1']
 instruction = "Your are a helpful assistant. Your answers are concise and precise."
 # between 0 and 1
 temperature = 0.7
-max_tokens = 500
+max_tokens = 1000
 
 # MANDATORY key-value pairs of action names, which are displayed as choices in the UI, and action prompts,
 # which are put in front of the input text. The first entry is the default.

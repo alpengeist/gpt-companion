@@ -172,14 +172,14 @@ def display_prompt_entry():
     popup.title("Prompt for selected text")
     popup.resizable(True, True)
     popup.attributes('-topmost', True)
-
+    popup.lift()
     # Make it appear near the mouse position
     popup.geometry(f"+{mouse_pos[0]}+{mouse_pos[1]}")
-
     # Create an entry field
     prompt_entry = tk.Entry(popup, width=80)
     prompt_entry.pack(pady=10, padx=10, fill=tk.X, expand=True)
-    prompt_entry.focus_set()  # Set focus to the entry field
+    popup.grab_set()
+    popup.after(100, lambda: popup.focus_set())
 
     def close(event=None):
         global prompt_active
